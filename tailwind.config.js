@@ -17,6 +17,7 @@ const config = {
       colors: {
         accent: "#1A51DB",
         secondary: "#EF4723",
+        text: "#222222",
       },
     },
   },

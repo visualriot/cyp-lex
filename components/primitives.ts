@@ -11,7 +11,7 @@ export const title = tv({
       green: "from-[#6FEE8D] to-[#17c964]",
       pink: "from-[#FF72E1] to-[#F54C7A]",
       foreground: "#000",
-      text: "#000",
+      text: "#222222",
       blueAccent: "#1A51DB",
       redAccent: "#EF4723",
     },

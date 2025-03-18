@@ -8,7 +8,6 @@ import { siteConfig } from "@/config/site";
 
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
-import { jetBrainsMono } from "@/config/fonts";
 
 import { Navbar } from "@/components/navbar";
 
@@ -36,7 +35,10 @@ export default function RootLayout({
     >
       <head />
       <body
-        className={clsx("min-h-screen bg-background antialiased text-black")}
+        className={clsx(
+          "min-h-screen bg-background antialiased text-black",
+          GeistSans.variable
+        )}
       >
         <Providers>
           <div className="relative flex flex-col h-screen">
@@ -44,8 +46,23 @@ export default function RootLayout({
             <main className="light container mx-auto max-w-7xl pt-16 px-6 flex-grow">
               {children}
             </main>
-            <footer className="w-full flex items-center justify-center py-3">
-              Footer
+            <footer className="w-full flex items-center justify-center py-4 text-xs text-secondary shadow-inner opacity-60">
+              Designed & Developed by&nbsp;
+              <a
+                href="https://rydzkowska.eu"
+                target="_blank"
+                className="hover:font-semibold hover:px-1 smooth"
+              >
+                Aleks Rydzkowska
+              </a>
+              &nbsp;from&nbsp;{" "}
+              <a
+                href="https://visual-riot.com"
+                target="_blank"
+                className="hover:font-semibold hover:px-1 smooth"
+              >
+                Visual Riot
+              </a>
             </footer>
           </div>
         </Providers>

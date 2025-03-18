@@ -5,6 +5,8 @@
 :root {
   --background-color: #ffffff; /* Light theme background color */
   --text-color: #000000; /* Light theme text color */
+  --font-sans: "GeistSans", sans-serif;
+  --font-mono: "GeistMono", monospace;
   --font-jetbrains-mono: "JetBrains Mono", monospace;
 }
 
