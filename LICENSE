@@ -1,6 +1,10 @@
 MIT License
 
+<<<<<<< HEAD
 Copyright (c) 2025 Aleks Rydzkowska
+=======
+Copyright (c) 2023 Next UI
+>>>>>>> 69711a7 (tailwind config and navbar setup)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

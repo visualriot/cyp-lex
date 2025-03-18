@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background-color: #ffffff; /* Light theme background color */
+  --text-color: #000000; /* Light theme text color */
+  --font-jetbrains-mono: "JetBrains Mono", monospace;
+}
+
+body.bg-background {
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+.global-padding {
+  @apply px-4 sm:px-6 md:px-12 lg:px-20 xl:px-32 2xl:px-48;
+}
+
+.font-jet {
+  font-family: var(--font-jetbrains-mono);
+}
+
+.smooth {
+  @apply transition-all duration-300 ease-in-out;
+}
+
+.global-width {
+  @apply max-w-7xl mx-auto;
+}
