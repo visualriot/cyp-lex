@@ -1,5 +1,6 @@
 import { Snippet } from "@heroui/snippet";
 import { Link } from "@heroui/link";
+import { PrimaryBtn } from "@/components/buttons";
 
 export default function AboutPage() {
   const linkStyle =
@@ -38,7 +39,7 @@ export default function AboutPage() {
         </Link>
         .
       </p>
-      <div className="space-y-4">
+      <div className="space-y-4 pb-4">
         <p>If you use this resource, please cite it as follows: </p>
         <Snippet
           hideSymbol
@@ -63,6 +64,9 @@ export default function AboutPage() {
           </p>
         </Snippet>
       </div>
+      <PrimaryBtn href="/database" size="lg">
+        Try it Now
+      </PrimaryBtn>
     </div>
   );
 }
