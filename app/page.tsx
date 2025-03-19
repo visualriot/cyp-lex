@@ -3,9 +3,20 @@ import { PrimaryBtn } from "@/components/buttons";
 
 export default function Home() {
   return (
-    <section className="container mx-auto max-w-7xl">
-      <div className="relative h-[40rem] grid grid-cols-1 md:grid-cols-2 gap-16 py-8 md:py-10">
-        <div className="flex flex-col justify-center">
+    <section className="container mx-auto max-w-7xl text-center md:text-left">
+      <div className="relative h-auto grid grid-cols-1 md:grid-cols-2 gap-16 py-8 md:py-10">
+        <div className="flex flex-col justify-center w-full items-center md:items-start space-y-8 md:space-y-0">
+          {/* Image on small screens */}
+          <div className="relative flex md:hidden items-center justify-center">
+            <div className="h-full w-full">
+              <Image
+                src="/hero_img.png"
+                alt="Hero Image"
+                width={300}
+                height={300}
+              />
+            </div>
+          </div>
           <div className="relative z-20 text-text space-y-10">
             <h1 className="text-4xl font-extrabold mb-4 font-jet">
               Discover what words children and young people encounter when they
@@ -25,7 +36,8 @@ export default function Home() {
             </PrimaryBtn>
           </div>
         </div>
-        <div className="relative flex items-center justify-center">
+        {/* Image on big screens */}
+        <div className="hidden md:flex relative  items-center justify-center">
           <div className="h-full w-full">
             <Image
               src="/hero_img.png"
@@ -38,7 +50,7 @@ export default function Home() {
         </div>
       </div>
       <div>
-        <div className="w-full text-zinc-500 text-sm text-center mt-8">
+        <div className="w-full relative text-zinc-500 text-sm text-center mt-8">
           <p>
             Korochkina, M., Marelli, M., Brysbaert, M., & Rastle, K. (2024).{" "}
             <span className="italic">
