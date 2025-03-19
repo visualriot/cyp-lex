@@ -34,3 +34,55 @@ export const PrimaryBtn: React.FC<BlueBtn> = ({
     </Button>
   );
 };
+
+interface SecondaryBtn {
+  size?: "sm" | "md" | "lg";
+  onPress?: () => void;
+  className?: string;
+  children: React.ReactNode;
+}
+
+export const SecondaryBtn: React.FC<SecondaryBtn> = ({
+  onPress,
+  size = "lg",
+  className = "",
+  children,
+}) => {
+  const router = useRouter();
+
+  return (
+    <Button
+      onPress={onPress}
+      size={size}
+      className={`bg-foreground-100 border-foreground-200 border-2 font-jet font-medium text-sm rounded-lg px-6 hover:!opacity-100 hover:scale-95 smooth ${className}`}
+    >
+      {children}
+    </Button>
+  );
+};
+
+interface TertiaryBtn {
+  size?: "sm" | "md" | "lg";
+  onPress?: () => void;
+  className?: string;
+  children: React.ReactNode;
+}
+
+export const TertiaryBtn: React.FC<TertiaryBtn> = ({
+  onPress,
+  size = "lg",
+  className = "",
+  children,
+}) => {
+  const router = useRouter();
+
+  return (
+    <Button
+      onPress={onPress}
+      size={size}
+      className={`bg-white gap-1 font-semibold text-base hover:!opacity-100 hover:scale-95 smooth ${className}`}
+    >
+      {children}
+    </Button>
+  );
+};

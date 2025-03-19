@@ -16,8 +16,10 @@ const config = {
       },
       colors: {
         accent: "#1A51DB",
+        accentLight: "#3298FF",
         secondary: "#EF4723",
         text: "#222222",
+        disabledText: "#908D8D",
       },
     },
   },
