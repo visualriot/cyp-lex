@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Button } from "@heroui/button";
+import { PrimaryBtn } from "@/components/buttons";
 
 export default function Home() {
   return (
@@ -20,13 +21,9 @@ export default function Home() {
               out words with certain characteristics. Please refer to the README
               tab for more detail on what information this database provides.
             </p>
-            <Button
-              href="/database"
-              size="lg"
-              className="mt-8 bg-accent text-white font-jet uppercase rounded-md px-12 py-6 hover:!opacity-100 hover:scale-95 smooth"
-            >
+            <PrimaryBtn href="/database" size="lg">
               Get Started
-            </Button>
+            </PrimaryBtn>
           </div>
         </div>
         <div className="relative flex items-center justify-center">

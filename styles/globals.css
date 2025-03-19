@@ -8,6 +8,8 @@
   --font-sans: "GeistSans", sans-serif;
   --font-mono: "GeistMono", monospace;
   --font-jetbrains-mono: "JetBrains Mono", monospace;
+  --accent-color: #1a51db; /* Light theme accent color */
+  --secondary-accent-color: #ef4723; /* Light theme secondary accent color */
 }
 
 body.bg-background {
@@ -29,4 +31,24 @@ body.bg-background {
 
 .global-width {
   @apply max-w-7xl mx-auto;
+}
+
+.red-disc li::marker {
+  color: var(--secondary-accent-color);
+}
+
+.red-disc li {
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.red-disc li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.5rem;
+  width: 0.5rem;
+  height: 0.5rem;
+  background-color: var(--secondary-accent-color);
+  border-radius: 50%;
 }
