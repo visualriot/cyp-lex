@@ -5,7 +5,7 @@ export default function ReadmeLayout({
 }) {
   return (
     <section className="flex flex-col gap-4 py-8 md:py-10 global-padding">
-      <div className="inline-block global-width">{children}</div>
+      <div className="inline-block global-width w-full">{children}</div>
     </section>
   );
 }

@@ -1,6 +1,6 @@
 import { PrimaryBtn } from "@/components/buttons";
 
-export default function AboutPage() {
+export default function ReadmePage() {
   return (
     <div className="space-y-8">
       <h2 className="font-jet text-xl font-bold">
