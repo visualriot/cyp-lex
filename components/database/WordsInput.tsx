@@ -213,7 +213,7 @@ export const WordsInput: React.FC<WordsInput> = ({
                 className="hidden"
                 id="file-upload"
               />
-              <SecondaryBtn as="span" onPress={handleButtonClick}>
+              <SecondaryBtn onPress={handleButtonClick}>
                 <UploadIcon /> upload excel file
               </SecondaryBtn>
             </div>
