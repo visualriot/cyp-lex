@@ -3,7 +3,7 @@ import { PrimaryBtn } from "@/components/buttons";
 
 export default function Home() {
   return (
-    <section className="container mx-auto max-w-7xl text-center md:text-left">
+    <section className="container mx-auto max-w-7xl text-center md:text-left mb-16">
       <div className="relative h-auto grid grid-cols-1 md:grid-cols-2 gap-16 py-8 md:py-10">
         <div className="flex flex-col justify-center w-full items-center md:items-start space-y-8 md:space-y-0">
           {/* Image on small screens */}
