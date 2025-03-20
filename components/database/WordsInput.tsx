@@ -1,14 +1,16 @@
-import React from "react";
+import React, { useRef } from "react";
 
-import { CheckboxGroup, useCheckbox } from "@heroui/checkbox";
+import { CheckboxGroup } from "@heroui/checkbox";
 import { CustomCheckbox } from "@/components/checkbox";
 import { AgeBand } from "./AgeBand";
 import { Textarea } from "@heroui/input";
-import { SecondaryBtn, PrimaryBtn, TertiaryBtn } from "../buttons";
+import { SecondaryBtn } from "../buttons";
 import { UploadIcon, InfoIcon } from "../icons";
 import { Tooltip } from "@heroui/tooltip";
 import { Submit } from "./Submit";
 import { Button } from "@heroui/button";
+import * as XLSX from "xlsx";
+import Papa from "papaparse";
 
 interface WordsInput {
   selectedMode: string;
@@ -85,6 +87,9 @@ export const WordsInput: React.FC<WordsInput> = ({
     []
   );
 
+  const [words, setWords] = React.useState<string[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const handleCheckboxChange = (value: string) => {
     setSelectedCheckboxes((prevSelected) =>
       prevSelected.includes(value)
@@ -95,6 +100,38 @@ export const WordsInput: React.FC<WordsInput> = ({
 
   const handleClear = () => {
     handleSelectMode("");
+  };
+
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const data = e.target?.result;
+        if (file.type === "text/csv") {
+          Papa.parse(data as string, {
+            complete: (result) => {
+              const words = result.data.map((row: any) => row[0]);
+              setWords(words);
+            },
+          });
+        } else {
+          const workbook = XLSX.read(data, { type: "binary" });
+          const sheetName = workbook.SheetNames[0];
+          const sheet = workbook.Sheets[sheetName];
+          const json = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+          const words = json.map((row: any) => row[0]);
+          setWords(words);
+        }
+      };
+      reader.readAsBinaryString(file);
+    }
+  };
+
+  const handleButtonClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
   };
 
   return (
@@ -159,9 +196,18 @@ export const WordsInput: React.FC<WordsInput> = ({
                 minRows={8}
                 fullWidth
                 isClearable
+                value={words.join("\n")}
+                onChange={(e) => setWords(e.target.value.split("\n"))}
               />
-              <SecondaryBtn>
-                {" "}
+              <input
+                type="file"
+                accept=".csv, .xls, .xlsx"
+                onChange={handleFileUpload}
+                ref={fileInputRef}
+                className="hidden"
+                id="file-upload"
+              />
+              <SecondaryBtn as="span" onPress={handleButtonClick}>
                 <UploadIcon /> upload excel file
               </SecondaryBtn>
             </div>
