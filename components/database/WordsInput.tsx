@@ -110,7 +110,7 @@ export const WordsInput: React.FC<WordsInput> = ({
         const data = e.target?.result;
         if (file.type === "text/csv") {
           Papa.parse(data as string, {
-            complete: (result) => {
+            complete: (result: Papa.ParseResult<any>) => {
               const words = result.data.map((row: any) => row[0]);
               setWords(words);
             },
@@ -126,12 +126,17 @@ export const WordsInput: React.FC<WordsInput> = ({
       };
       reader.readAsBinaryString(file);
     }
+    event.target.value = "";
   };
 
   const handleButtonClick = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
     }
+  };
+
+  const handleTextareaClear = () => {
+    setWords([]);
   };
 
   return (
@@ -198,6 +203,7 @@ export const WordsInput: React.FC<WordsInput> = ({
                 isClearable
                 value={words.join("\n")}
                 onChange={(e) => setWords(e.target.value.split("\n"))}
+                onClear={handleTextareaClear}
               />
               <input
                 type="file"
