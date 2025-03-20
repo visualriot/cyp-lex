@@ -28,9 +28,9 @@ export default function AboutPage() {
       </p>
       <p>
         The database is also publicly available as several .csv data sheets. If
-        using Excel, open these files via the 'Insert Data' tab. Each file is
-        accompanied by detailed information on all metrics. You can download the
-        files using the following link:{" "}
+        using Excel, open these files via the &apos;Insert Data&apos; tab. Each
+        file is accompanied by detailed information on all metrics. You can
+        download the files using the following link:{" "}
         <Link
           className={linkStyle}
           href="https://doi.org/10.17605/OSF.IO/SQU49"
