@@ -28,8 +28,8 @@ export default function Home() {
               children and young people in the UK. It provides insights into how
               over 100,000 distinct words are used across 1,200 books for ages
               7–16. You can use the menu below to look up specific words or pull
-              out words with certain characteristics. Please refer to the README
-              tab for more detail on what information this database provides.
+              out words with certain characteristics. Please refer to the READ
+              ME tab for more detail on what information this database provides.
             </p>
             <PrimaryBtn href="/database" size="lg">
               Get Started

@@ -3,9 +3,10 @@ import React from "react";
 import { CheckboxGroup, useCheckbox, Checkbox } from "@heroui/checkbox";
 import { Slider } from "@heroui/slider";
 import { AgeBand } from "./AgeBand";
-import { PrimaryBtn, TertiaryBtn } from "../buttons";
-import { ClearIcon } from "../icons";
 import { Submit } from "./Submit";
+import { UploadIcon, InfoIcon } from "../icons";
+import { Tooltip } from "@heroui/tooltip";
+import { Button } from "@heroui/button";
 
 interface StatsInput {
   selectedMode: string;
@@ -66,7 +67,7 @@ export const StatsInput: React.FC<StatsInput> = ({
     <div className="space-y-8 w-full flex flex-col">
       <div className="space-y-8 w-full flex flex-col">
         <h3 className="">Select characteristics to filter words</h3>
-        <div className="w-full flex shadow-md border-1 border-foreground-100 rounded p-6 flex-col gap-y-12">
+        <div className="w-full flex shadow-md border-1 border-foreground-100 rounded p-6 flex-col space-y-16 pt-8 pb-16 px-12">
           <AgeBand />
 
           {/* Sliders */}
@@ -102,42 +103,55 @@ export const StatsInput: React.FC<StatsInput> = ({
             ]}
           />
 
-          <Slider
-            {...commonSliderProps}
-            label="Zipf Frequency"
-            marks={[
-              {
-                value: 0,
-                label: "0",
-              },
-              {
-                value: 10,
-                label: "10",
-              },
-              {
-                value: 20,
-                label: "20",
-              },
-              {
-                value: 30,
-                label: "30",
-              },
-              {
-                value: 40,
-                label: "40",
-              },
-              {
-                value: 45,
-                label: "45",
-              },
-            ]}
-          />
+          <div className="space-y-4">
+            <div className="flex flex-row space-x-2 items-center">
+              <h4>Zipf frequency</h4>
+              <Tooltip
+                content="standardised frequency metric"
+                className="bg-zinc-600 text-white rounded-md whitespace-normal max-w-72 text-xs text-center px-4 py-2"
+              >
+                <Button className="h-5 w-5 min-w-4 rounded-md p-0 bg-text opacity-70">
+                  <InfoIcon size={12} className="fill-white" fill="white" />
+                </Button>
+              </Tooltip>
+            </div>
+            <Slider
+              {...commonSliderProps}
+              // label="Zipf Frequency"
+              marks={[
+                {
+                  value: 0,
+                  label: "0",
+                },
+                {
+                  value: 10,
+                  label: "10",
+                },
+                {
+                  value: 20,
+                  label: "20",
+                },
+                {
+                  value: 30,
+                  label: "30",
+                },
+                {
+                  value: 40,
+                  label: "40",
+                },
+                {
+                  value: 45,
+                  label: "45",
+                },
+              ]}
+            />
+          </div>
           {/* Checkboxes */}
           <CheckboxGroup
             label="Most common part of speech"
             orientation="horizontal"
             classNames={{
-              wrapper: "flex flex-row space-x-16 space-y-2",
+              wrapper: "flex flex-row space-x-16 space-y-2 -mb-4",
               label: "font-semibold text-text",
             }}
           >
@@ -154,38 +168,51 @@ export const StatsInput: React.FC<StatsInput> = ({
               </Checkbox>
             ))}
           </CheckboxGroup>
-          {/* Book percentage */}
-          <Slider
-            {...commonSliderProps}
-            label="Book percentage"
-            marks={[
-              {
-                value: 0,
-                label: "0",
-              },
-              {
-                value: 10,
-                label: "10",
-              },
-              {
-                value: 20,
-                label: "20",
-              },
-              {
-                value: 30,
-                label: "30",
-              },
-              {
-                value: 40,
-                label: "40",
-              },
-              {
-                value: 45,
-                label: "45",
-              },
-            ]}
-          />
 
+          {/* Book percentage */}
+          <div className="space-y-4">
+            <div className="flex flex-row space-x-2 items-center">
+              <h4>Book percentage</h4>
+              <Tooltip
+                content="percentage of books in the selected age range the word is encountered in"
+                className="bg-zinc-600 text-white rounded-md whitespace-normal max-w-72 text-xs text-center px-4 py-2"
+              >
+                <Button className="h-5 w-5 min-w-4 rounded-md p-0 bg-text opacity-70">
+                  <InfoIcon size={12} className="fill-white" fill="white" />
+                </Button>
+              </Tooltip>
+            </div>
+            <Slider
+              {...commonSliderProps}
+              // label="Book percentage"
+              marks={[
+                {
+                  value: 0,
+                  label: "0",
+                },
+                {
+                  value: 10,
+                  label: "10",
+                },
+                {
+                  value: 20,
+                  label: "20",
+                },
+                {
+                  value: 30,
+                  label: "30",
+                },
+                {
+                  value: 40,
+                  label: "40",
+                },
+                {
+                  value: 45,
+                  label: "45",
+                },
+              ]}
+            />
+          </div>
           {/* TV */}
 
           <Slider

@@ -120,6 +120,72 @@ export default function ResultsPage() {
     },
   });
 
+  // Generate download and copy table data
+  const generateTableData = (delimiter: string) => {
+    const headers = [
+      "Word",
+      "Lemma",
+      "mcPoS",
+      "Raw",
+      "Zipf",
+      "Count",
+      "Percentage",
+      "CBeebies raw",
+      "CBeebies zipf",
+      "CBBC raw",
+      "CBBC zipf",
+      "SUBTLEX-UK raw",
+      "SUBTLEX-UK zipf",
+    ];
+
+    const rows = list.items.map((item) =>
+      [
+        item.word,
+        item.lemma,
+        item.mcpos,
+        item.raw,
+        item.zipf,
+        item.bookRawCount,
+        item.bookPercentage,
+        item.rawCbeebies,
+        item.zipfCbeebies,
+        item.rawCbbc,
+        item.zipfCbbc,
+        item.rawSubtlex,
+        item.zipfSubtlex,
+      ].join(delimiter)
+    );
+
+    return [headers.join(delimiter), ...rows].join("\n");
+  };
+
+  // COPY TABLE
+  const copyTableData = () => {
+    const tableData = generateTableData("\t");
+
+    navigator.clipboard.writeText(tableData).then(
+      () => {
+        alert("Table data copied to clipboard!");
+      },
+      (err) => {
+        console.error("Failed to copy table data: ", err);
+      }
+    );
+  };
+
+  const downloadTableData = () => {
+    const csvContent = generateTableData(",");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "results.csv");
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <section className="results-page w-full flex flex-col gap-y-8">
       <div className="w-full flex flex-row justify-between items-center ">
@@ -130,11 +196,11 @@ export default function ResultsPage() {
           </p>
         </div>
         <div className="flex flex-row w-1/2 justify-end items-center space-x-8">
-          <SecondaryBtn onPress={() => window.print()}>
+          <SecondaryBtn onPress={copyTableData}>
             <CopyIcon />
             Copy all
           </SecondaryBtn>
-          <SecondaryBtn onPress={() => window.print()}>
+          <SecondaryBtn onPress={downloadTableData}>
             <DownloadIcon /> Download results
           </SecondaryBtn>
         </div>

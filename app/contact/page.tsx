@@ -18,7 +18,7 @@ export default function ContactPage() {
         <span className="text-secondary font-semibold">
           ‘Inquiry about the CYP-LEX digital database’
         </span>{" "}
-        in the subject line
+        in the subject line.
       </p>
     </div>
   );

@@ -20,7 +20,7 @@ export default function ReadmePage() {
           The number of books in which it appears within that age group (raw
           count and percentage). Please note that for the individual age bands
           (7–9, 10–12, 13–16), the total number of books is 400, while for all
-          ages combined, the total is 1,200 books;
+          ages combined, the total is 1,200 books
         </li>
         <li>
           The number of times (both raw count and a standardised frequency

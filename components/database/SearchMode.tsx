@@ -43,7 +43,7 @@ export const SearchMode: React.FC<SearchMode> = ({
             } ${selectedMode === "words" ? "text-disabledText fill-disabledText hover:text-text hover:fill-text" : ""} smooth`}
           >
             <div className="flex items-center gap-x-2 justify-center">
-              <StatsIcon /> Find words based on characteristics
+              <StatsIcon /> Find words with specific characteristics
             </div>
           </button>
         </div>

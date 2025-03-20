@@ -6,7 +6,7 @@ export const siteConfig = {
     "Discover what words children and young people encounter when they read",
   navItems: [
     {
-      label: "Read me",
+      label: "READ ME",
       href: "/readme",
     },
     {

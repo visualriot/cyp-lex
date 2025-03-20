@@ -5,8 +5,10 @@ import { CustomCheckbox } from "@/components/checkbox";
 import { AgeBand } from "./AgeBand";
 import { Textarea } from "@heroui/input";
 import { SecondaryBtn, PrimaryBtn, TertiaryBtn } from "../buttons";
-import { UploadIcon, ClearIcon } from "../icons";
+import { UploadIcon, InfoIcon } from "../icons";
+import { Tooltip } from "@heroui/tooltip";
 import { Submit } from "./Submit";
+import { Button } from "@heroui/button";
 
 interface WordsInput {
   selectedMode: string;
@@ -18,12 +20,39 @@ export const WordsInput: React.FC<WordsInput> = ({
   handleSelectMode,
 }) => {
   const stats = [
-    { id: 1, name: "Lemma", value: "lemma" },
-    { id: 2, name: "Most common part of speech", value: "mcpos" },
-    { id: 3, name: "Raw frequency", value: "raw" },
-    { id: 4, name: "Zipf frequency", value: "zipf" },
-    { id: 5, name: "Book raw count", value: "book-raw-count" },
-    { id: 6, name: "Book percentage", value: "book-percentage" },
+    { id: 1, name: "Lemma", value: "lemma", tooltip: "uninflected form" },
+    {
+      id: 2,
+      name: "Most common part of speech",
+      value: "mcpos",
+    },
+    {
+      id: 3,
+      name: "Raw frequency",
+      value: "raw",
+      tooltip:
+        "number of times the word is encountered in the selected age range",
+    },
+    {
+      id: 4,
+      name: "Zipf frequency",
+      value: "zipf",
+      tooltip: "standardised frequency metric",
+    },
+    {
+      id: 5,
+      name: "Book raw count",
+      value: "book-raw-count",
+      tooltip:
+        "number of books in the selected age range the word is encountered in",
+    },
+    {
+      id: 6,
+      name: "Book percentage",
+      value: "book-percentage",
+      tooltip:
+        "percentage of books in the selected age range the word is encountered in",
+    },
     {
       id: 7,
       name: "Raw frequency in TV: CBeebies (ages 0-6)",
@@ -70,9 +99,9 @@ export const WordsInput: React.FC<WordsInput> = ({
 
   return (
     <div className="space-y-8 w-full flex flex-col">
-      <div className="space-y-6 w-full flex flex-col">
+      <div className="space-y-8 w-full flex flex-col">
         <h3 className="">Configure Your Search</h3>
-        <div className="w-full flex shadow-md border-1 border-foreground-100 rounded p-6 flex-col gap-y-12">
+        <div className="w-full flex shadow-md border-1 border-foreground-100 rounded p-6 flex-col space-y-16 pt-8 pb-16 px-12">
           <AgeBand />
 
           {/* checkboxes */}
@@ -92,7 +121,24 @@ export const WordsInput: React.FC<WordsInput> = ({
                   isSelected={selectedCheckboxes.includes(info.value)}
                   onChange={() => handleCheckboxChange(info.value)}
                 >
-                  {info.name}
+                  <div className="flex items-center space-x-2">
+                    <span>{info.name}</span>
+                    {info.tooltip && (
+                      <Tooltip
+                        content={info.tooltip}
+                        key={`${info.tooltip}-${info.id}`}
+                        className="bg-zinc-600 text-white rounded-md whitespace-normal max-w-72 text-xs text-center px-4 py-2"
+                      >
+                        <Button className="h-5 w-5 min-w-4 rounded-md p-0 bg-text opacity-70">
+                          <InfoIcon
+                            size={12}
+                            className="fill-white"
+                            fill="white"
+                          />
+                        </Button>
+                      </Tooltip>
+                    )}
+                  </div>
                 </CustomCheckbox>
               ))}
             </CheckboxGroup>
