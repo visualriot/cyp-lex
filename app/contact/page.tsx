@@ -13,7 +13,7 @@ export default function ContactPage() {
         </a>
         .
       </h1>
-      <p className="font-medium">
+      <p className="text-center font-medium">
         Please include{" "}
         <span className="text-secondary font-semibold">
           ‘Inquiry about the CYP-LEX digital database’
