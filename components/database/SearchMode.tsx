@@ -25,25 +25,34 @@ export const SearchMode: React.FC<SearchMode> = ({
         )}
 
         {/* buttons container */}
-        <div className="relative z-10 grid grid-cols-2 gap-4 font-semibold">
+        <div className="relative z-10 flex font-semibold">
           <button
             onClick={() => handleSelectMode("words")}
-            className={`px-4 py-5 rounded-lg text-sm ${selectedMode === "" ? "hover:scale-[98%]" : ""}  ${
-              selectedMode === "words" ? "text-text fill-text" : ""
-            } ${selectedMode === "stats" ? "text-disabledText fill-disabledText hover:text-text hover:fill-text" : ""} smooth`}
+            className={`flex-1 px-4 py-5 rounded-lg text-sm ${
+              selectedMode === "" ? "hover:scale-[98%]" : ""
+            } ${selectedMode === "words" ? "text-text fill-text" : ""} ${
+              selectedMode === "stats"
+                ? "text-disabledText fill-disabledText hover:text-text hover:scale-[98%] hover:fill-text"
+                : ""
+            } smooth`}
           >
-            <div className="flex items-center gap-x-2 justify-center">
-              <QuoteIcon /> Find characteristics of specific words
+            <div className="flex flex-col lg:flex-row items-center gap-x-2 gap-y-2 justify-center">
+              <QuoteIcon size={16} /> Find characteristics of specific words
             </div>
           </button>
+          <div className="w-[1px] bg-white opacity-50"></div>
           <button
             onClick={() => handleSelectMode("stats")}
-            className={`px-4 py-5 rounded-lg text-sm ${selectedMode === "" ? "hover:scale-[98%]" : ""}  ${
-              selectedMode === "stats" ? "text-text fill-text" : ""
-            } ${selectedMode === "words" ? "text-disabledText fill-disabledText hover:text-text hover:fill-text" : ""} smooth`}
+            className={`flex-1 px-4 py-5 rounded-lg text-sm ${
+              selectedMode === "" ? "hover:scale-[98%]" : ""
+            } ${selectedMode === "stats" ? "text-text fill-text" : ""} ${
+              selectedMode === "words"
+                ? "text-disabledText fill-disabledText hover:text-text hover:scale-[98%] hover:fill-text"
+                : ""
+            } smooth`}
           >
-            <div className="flex items-center gap-x-2 justify-center">
-              <StatsIcon /> Find words with specific characteristics
+            <div className="flex flex-col lg:flex-row items-center gap-x-2 gap-y-2 justify-center">
+              <StatsIcon size={16} /> Find words with specific characteristics
             </div>
           </button>
         </div>

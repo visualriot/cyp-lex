@@ -39,7 +39,7 @@ export default function DatabasePage() {
       {/* Input */}
       {selectedMode == "words" && (
         <WordsInput
-          selectedMode={selectedMode}
+          // selectedMode={selectedMode}
           handleSelectMode={handleSelectMode}
         />
       )}

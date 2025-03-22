@@ -1,6 +1,6 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect, useState } from "react";
 
-import { CheckboxGroup } from "@heroui/checkbox";
+import { CheckboxGroup, Checkbox } from "@heroui/checkbox";
 import { CustomCheckbox } from "@/components/checkbox";
 import { AgeBand } from "./AgeBand";
 import { Textarea } from "@heroui/input";
@@ -13,14 +13,10 @@ import * as XLSX from "xlsx";
 import Papa from "papaparse";
 
 interface WordsInput {
-  selectedMode: string;
   handleSelectMode: (mode: string) => void;
 }
 
-export const WordsInput: React.FC<WordsInput> = ({
-  selectedMode,
-  handleSelectMode,
-}) => {
+export const WordsInput: React.FC<WordsInput> = ({ handleSelectMode }) => {
   const stats = [
     { id: 1, name: "Lemma", value: "lemma", tooltip: "uninflected form" },
     {
@@ -83,20 +79,37 @@ export const WordsInput: React.FC<WordsInput> = ({
     },
   ];
 
-  const [selectedCheckboxes, setSelectedCheckboxes] = React.useState<string[]>(
-    []
-  );
+  const [isMobile, setisMobile] = React.useState(true);
+
+  const [tooltipStates, setTooltipStates] = React.useState<{
+    [key: string]: boolean;
+  }>({});
+
+  useEffect(() => {
+    const handleResize = () => {
+      setisMobile(window.innerWidth <= 1024);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest(".tooltip-button")) {
+        setTooltipStates({});
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
 
   const [words, setWords] = React.useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const handleCheckboxChange = (value: string) => {
-    setSelectedCheckboxes((prevSelected) =>
-      prevSelected.includes(value)
-        ? prevSelected.filter((item) => item !== value)
-        : [...prevSelected, value]
-    );
-  };
 
   const handleClear = () => {
     handleSelectMode("");
@@ -139,11 +152,38 @@ export const WordsInput: React.FC<WordsInput> = ({
     setWords([]);
   };
 
+  const commonTooltipProps = (id: string, content: string) => ({
+    content: content,
+    className:
+      "bg-zinc-600 text-white rounded-md whitespace-normal max-w-72 text-xs text-center px-4 py-2",
+    isOpen: isMobile ? tooltipStates[id] : undefined,
+    onClose: () =>
+      setTooltipStates((prevStates) => ({ ...prevStates, [id]: false })),
+  });
+
+  const handleTooltipToggle = (id: string) => {
+    if (isMobile) {
+      setTooltipStates((prevStates) => ({
+        ...prevStates,
+        [id]: !prevStates[id],
+      }));
+
+      if (!tooltipStates[id]) {
+        setTimeout(() => {
+          setTooltipStates((prevStates) => ({
+            ...prevStates,
+            [id]: false,
+          }));
+        }, 3500);
+      }
+    }
+  };
+
   return (
     <div className="space-y-8 w-full flex flex-col">
       <div className="space-y-8 w-full flex flex-col">
         <h3 className="">Configure Your Search</h3>
-        <div className="w-full flex shadow-md border-1 border-foreground-100 rounded p-6 flex-col space-y-16 pt-8 pb-16 px-12">
+        <div className="w-full flex  border-foreground-100 rounded  flex-col space-y-16 lg:border-1 lg:shadow-md  lg:p-6 lg:pt-8 lg:pb-16 lg:px-12">
           <AgeBand />
 
           {/* checkboxes */}
@@ -153,35 +193,37 @@ export const WordsInput: React.FC<WordsInput> = ({
               label="Select all the characteristics you want to retrieve"
               orientation="horizontal"
               classNames={{
-                wrapper: "flex flex-wrap gap-2 w-full",
+                wrapper: "flex flex-wrap gap-x-7 gap-y-4 w-full",
                 label: "font-semibold text-text",
               }}
             >
               {stats.map((info) => (
-                <CustomCheckbox
-                  key={info.id}
-                  isSelected={selectedCheckboxes.includes(info.value)}
-                  onChange={() => handleCheckboxChange(info.value)}
-                >
-                  <div className="flex items-center space-x-2">
-                    <span>{info.name}</span>
-                    {info.tooltip && (
-                      <Tooltip
-                        content={info.tooltip}
-                        key={`${info.tooltip}-${info.id}`}
-                        className="bg-zinc-600 text-white rounded-md whitespace-normal max-w-72 text-xs text-center px-4 py-2"
-                      >
-                        <Button className="h-5 w-5 min-w-4 rounded-md p-0 bg-text opacity-70">
+                <div className="space-x-1 flex flex-row" key={info.id}>
+                  <Checkbox value={info.name}>
+                    <div className="flex items-center text-sm">
+                      <span>{info.name}</span>
+                    </div>
+                  </Checkbox>
+                  {info.tooltip && (
+                    <Tooltip
+                      {...commonTooltipProps(info.tooltip, info.tooltip)}
+                      key={info.tooltip}
+                    >
+                      <div className="flex items-center hover:opacity-100 transition-opacity opacity-50 z-50">
+                        <Button
+                          className="h-4 w-4 min-w-4 rounded-lg p-0 tooltip-button bg-text"
+                          onPress={() => handleTooltipToggle(info.tooltip)}
+                        >
                           <InfoIcon
-                            size={12}
+                            size={10}
                             className="fill-white"
                             fill="white"
                           />
                         </Button>
-                      </Tooltip>
-                    )}
-                  </div>
-                </CustomCheckbox>
+                      </div>
+                    </Tooltip>
+                  )}
+                </div>
               ))}
             </CheckboxGroup>
           </div>

@@ -33,8 +33,8 @@ export const QuoteIcon: React.FC<IconSvgProps> = ({
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="18.12"
-      height="11.78"
+      width={size || width}
+      height={size || height}
       viewBox="0 0 18.12 11.78"
     >
       <g id="quote" transform="translate(-2.5 -19.12)">
@@ -63,8 +63,8 @@ export const StatsIcon: React.FC<IconSvgProps> = ({
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="12.027"
-      height="12.036"
+      width={size || width}
+      height={size || height}
       viewBox="0 0 12.027 12.036"
     >
       <g id="layer1" transform="translate(-0.264 -290.91)">
@@ -234,6 +234,7 @@ export const InfoIcon: React.FC<IconSvgProps> = ({
       viewBox="0 0 64 64"
       xmlns="http://www.w3.org/2000/svg"
       fill={fill}
+      className={`${className} pointer-events-none`}
     >
       <g>
         <path
