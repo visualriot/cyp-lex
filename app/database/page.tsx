@@ -13,7 +13,7 @@ export default function DatabasePage() {
   };
 
   return (
-    <section className="w-full flex flex-col gap-y-16 h-full">
+    <section className="w-full flex flex-col gap-y-16 justify-center mx-auto max-w-7xl text-center md:text-left mb-16 global-width">
       {/* Search Mode */}
       <div
         className={`flex space-y-8 w-full flex-col smooth ${
