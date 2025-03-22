@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { CheckboxGroup, useCheckbox, Checkbox } from "@heroui/checkbox";
 import { Slider } from "@heroui/slider";
 import { AgeBand } from "./AgeBand";
 import { Submit } from "./Submit";
-import { UploadIcon, InfoIcon } from "../icons";
+import { InfoIcon } from "../icons";
 import { Tooltip } from "@heroui/tooltip";
 import { Button } from "@heroui/button";
+import LabelWithTooltip from "./LabelWithTooltip";
 
 interface StatsInput {
   selectedMode: string;
@@ -20,6 +21,19 @@ export const StatsInput: React.FC<StatsInput> = ({
   const [selectedCheckboxes, setSelectedCheckboxes] = React.useState<string[]>(
     []
   );
+  const [isMobile, setisMobile] = React.useState(true);
+  const [tooltipStates, setTooltipStates] = React.useState<{
+    [key: string]: boolean;
+  }>({});
+
+  useEffect(() => {
+    const handleResize = () => {
+      setisMobile(window.innerWidth <= 1024);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const mcpos = [
     { id: 1, name: "Noun", value: "noun" },
@@ -38,6 +52,15 @@ export const StatsInput: React.FC<StatsInput> = ({
 
   const handleClear = () => {
     handleSelectMode("");
+  };
+
+  const handleTooltipToggle = (id: string) => {
+    if (isMobile) {
+      setTooltipStates((prevStates) => ({
+        ...prevStates,
+        [id]: !prevStates[id],
+      }));
+    }
   };
 
   const commonSliderProps = {
@@ -60,14 +83,23 @@ export const StatsInput: React.FC<StatsInput> = ({
     maxValue: 45,
     minValue: 0,
     step: 1,
-    showSteps: true,
+    showSteps: !isMobile,
   };
+
+  const commonTooltipProps = (id: string, content: string) => ({
+    content: content,
+    className:
+      "bg-zinc-600 text-white rounded-md whitespace-normal max-w-72 text-xs text-center px-4 py-2",
+    isOpen: isMobile ? tooltipStates[id] : undefined,
+    onClose: () =>
+      setTooltipStates((prevStates) => ({ ...prevStates, [id]: false })),
+  });
 
   return (
     <div className="space-y-8 w-full flex flex-col">
       <div className="space-y-8 w-full flex flex-col">
         <h3 className="">Select characteristics to filter words</h3>
-        <div className="w-full flex shadow-md border-1 border-foreground-100 rounded p-6 flex-col space-y-16 pt-8 pb-16 px-12">
+        <div className="w-full flex  border-foreground-100 rounded  flex-col space-y-16 lg:border-1 lg:shadow-md  lg:p-6 lg:pt-8 lg:pb-16 lg:px-12">
           <AgeBand />
 
           {/* Sliders */}
@@ -103,21 +135,23 @@ export const StatsInput: React.FC<StatsInput> = ({
             ]}
           />
 
-          <div className="space-y-4">
-            <div className="flex flex-row space-x-2 items-center">
+          <div className="space-y-4 relative">
+            <div className="absolute flex flex-row space-x-2 items-center top-4 left-0">
               <h4>Zipf frequency</h4>
               <Tooltip
-                content="standardised frequency metric"
-                className="bg-zinc-600 text-white rounded-md whitespace-normal max-w-72 text-xs text-center px-4 py-2"
+                {...commonTooltipProps("zipf", "standardised frequency metric")}
               >
-                <Button className="h-5 w-5 min-w-4 rounded-md p-0 bg-text opacity-70">
+                <Button
+                  className="h-5 w-5 min-w-4 rounded-md p-0 bg-text opacity-70"
+                  onPress={() => handleTooltipToggle("zipf")}
+                >
                   <InfoIcon size={12} className="fill-white" fill="white" />
                 </Button>
               </Tooltip>
             </div>
             <Slider
               {...commonSliderProps}
-              // label="Zipf Frequency"
+              label=" "
               marks={[
                 {
                   value: 0,
@@ -151,7 +185,8 @@ export const StatsInput: React.FC<StatsInput> = ({
             label="Most common part of speech"
             orientation="horizontal"
             classNames={{
-              wrapper: "flex flex-row space-x-16 space-y-2 -mb-4",
+              wrapper:
+                "flex flex-row mt-2 lg:mt-0  lg:space-x-16 lg:space-y-2 -mb-4",
               label: "font-semibold text-text",
             }}
           >
@@ -170,21 +205,26 @@ export const StatsInput: React.FC<StatsInput> = ({
           </CheckboxGroup>
 
           {/* Book percentage */}
-          <div className="space-y-4">
-            <div className="flex flex-row space-x-2 items-center">
+          <div className="space-y-4 relative ">
+            <div className="absolute flex flex-row space-x-2 items-center top-4 left-0">
               <h4>Book percentage</h4>
               <Tooltip
-                content="percentage of books in the selected age range the word is encountered in"
-                className="bg-zinc-600 text-white rounded-md whitespace-normal max-w-72 text-xs text-center px-4 py-2"
+                {...commonTooltipProps(
+                  "percentage",
+                  "percentage of books in the selected age range the word is encountered in"
+                )}
               >
-                <Button className="h-5 w-5 min-w-4 rounded-md p-0 bg-text opacity-70">
+                <Button
+                  className="h-5 w-5 min-w-4 rounded-md p-0 bg-text opacity-70"
+                  onPress={() => handleTooltipToggle("percentage")}
+                >
                   <InfoIcon size={12} className="fill-white" fill="white" />
                 </Button>
               </Tooltip>
             </div>
             <Slider
               {...commonSliderProps}
-              // label="Book percentage"
+              label=" "
               marks={[
                 {
                   value: 0,

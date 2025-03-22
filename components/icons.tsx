@@ -33,8 +33,8 @@ export const QuoteIcon: React.FC<IconSvgProps> = ({
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="18.12"
-      height="11.78"
+      width={size || width}
+      height={size || height}
       viewBox="0 0 18.12 11.78"
     >
       <g id="quote" transform="translate(-2.5 -19.12)">
@@ -63,8 +63,8 @@ export const StatsIcon: React.FC<IconSvgProps> = ({
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="12.027"
-      height="12.036"
+      width={size || width}
+      height={size || height}
       viewBox="0 0 12.027 12.036"
     >
       <g id="layer1" transform="translate(-0.264 -290.91)">
@@ -234,6 +234,7 @@ export const InfoIcon: React.FC<IconSvgProps> = ({
       viewBox="0 0 64 64"
       xmlns="http://www.w3.org/2000/svg"
       fill={fill}
+      className={`${className} pointer-events-none`}
     >
       <g>
         <path
@@ -243,6 +244,37 @@ export const InfoIcon: React.FC<IconSvgProps> = ({
         <path
           fill={fill}
           d="m37.43976 4.005a7.235 7.235 0 1 0 7.24 7.24 7.24241 7.24241 0 0 0 -7.24-7.24z"
+        ></path>
+      </g>
+    </svg>
+  );
+};
+
+export const DoneIcon: React.FC<IconSvgProps> = ({
+  size = 24,
+  width,
+  height,
+  className,
+  fill = "currentColor",
+  ...props
+}) => {
+  return (
+    <svg
+      version="1.1"
+      id="fi_62025"
+      xmlns="http://www.w3.org/2000/svg"
+      x="0px"
+      y="0px"
+      width={size || width}
+      height={size || height}
+      fill={fill}
+      viewBox="0 0 469.184 469.185"
+    >
+      <g>
+        <path
+          d="M462.5,96.193l-21.726-21.726c-8.951-8.95-23.562-8.95-32.59,0L180.368,302.361l-119.34-119.34
+		c-8.95-8.951-23.562-8.951-32.589,0L6.712,204.747c-8.95,8.951-8.95,23.562,0,32.589L163.997,394.62
+		c4.514,4.514,10.327,6.809,16.218,6.809s11.781-2.295,16.219-6.809L462.27,128.783C471.45,119.68,471.45,105.145,462.5,96.193z"
         ></path>
       </g>
     </svg>
