@@ -138,15 +138,18 @@ export const StatsInput: React.FC<StatsInput> = ({
           <div className="space-y-4 relative">
             <div className="absolute flex flex-row space-x-2 items-center top-4 left-0">
               <h4>Zipf frequency</h4>
+
               <Tooltip
                 {...commonTooltipProps("zipf", "standardised frequency metric")}
               >
-                <Button
-                  className="h-5 w-5 min-w-4 rounded-md p-0 bg-text opacity-70"
-                  onPress={() => handleTooltipToggle("zipf")}
-                >
-                  <InfoIcon size={12} className="fill-white" fill="white" />
-                </Button>
+                <div className="flex items-center hover:opacity-100 transition-opacity opacity-50 z-50">
+                  <Button
+                    className="h-4 w-4 min-w-4 rounded-xl p-0 tooltip-button bg-text"
+                    onPress={() => handleTooltipToggle("zipf")}
+                  >
+                    <InfoIcon size={10} className="fill-white" fill="white" />
+                  </Button>
+                </div>
               </Tooltip>
             </div>
             <Slider
@@ -214,12 +217,14 @@ export const StatsInput: React.FC<StatsInput> = ({
                   "percentage of books in the selected age range the word is encountered in"
                 )}
               >
-                <Button
-                  className="h-5 w-5 min-w-4 rounded-md p-0 bg-text opacity-70"
-                  onPress={() => handleTooltipToggle("percentage")}
-                >
-                  <InfoIcon size={12} className="fill-white" fill="white" />
-                </Button>
+                <div className="flex items-center hover:opacity-100 transition-opacity opacity-50 z-50">
+                  <Button
+                    className="h-4 w-4 min-w-4 rounded-xl p-0 tooltip-button bg-text"
+                    onPress={() => handleTooltipToggle("percentage")}
+                  >
+                    <InfoIcon size={10} className="fill-white" fill="white" />
+                  </Button>
+                </div>
               </Tooltip>
             </div>
             <Slider
