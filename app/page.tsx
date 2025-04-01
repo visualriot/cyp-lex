@@ -52,18 +52,23 @@ export default function Home() {
       <div>
         <div className="w-full relative text-zinc-500 text-sm text-center mt-8">
           <p>
-            Korochkina, M., Marelli, M., Brysbaert, M., & Rastle, K. (2024).{" "}
+            Korochkina, M., Marelli, M., Brysbaert, M., & Rastle, K. (2024). The
+            Children and Young People’s Books Lexicon (CYP-LEX): A large-scale
+            lexical database of books read by children and young people in the
+            United Kingdom.
             <span className="italic">
-              The Children and Young People’s Books Lexicon (CYP-LEX): A
-              large-scale lexical database of books read by children and young
-              people in the United Kingdom.
-            </span>{" "}
-            Quarterly Journal of Experimental Psychology, 77(12), 2418-2438.{" "}
+              {" "}
+              Quarterly Journal of Experimental Psychology
+            </span>
+            , 77(12), 2418-2438.
             <a
               href="https://doi.org/10.1177/17470218241229694"
               className="hover:text-accent smooth"
             >
-              https://doi.org/10.1177/17470218241229694
+              {" "}
+              <span className="text-accent hover:underline smooth">
+                https://doi.org/10.1177/17470218241229694
+              </span>
             </a>
           </p>
         </div>

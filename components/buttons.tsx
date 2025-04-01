@@ -1,19 +1,20 @@
 "use client";
 import * as React from "react";
 import { useRouter } from "next/navigation";
-
 import { Button } from "@heroui/button";
 
-interface BlueBtn {
+interface PrimaryBtnProps {
   href?: string;
   size?: "sm" | "md" | "lg";
+  onPress?: () => void;
   className?: string;
   children: React.ReactNode;
 }
 
-export const PrimaryBtn: React.FC<BlueBtn> = ({
-  href = "/",
+export const PrimaryBtn: React.FC<PrimaryBtnProps> = ({
+  href,
   size = "lg",
+  onPress,
   className = "",
   children,
 }) => {
@@ -22,6 +23,8 @@ export const PrimaryBtn: React.FC<BlueBtn> = ({
   const handleClick = () => {
     if (href) {
       router.push(href);
+    } else if (onPress) {
+      onPress();
     }
   };
   return (

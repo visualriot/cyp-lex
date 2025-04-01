@@ -4,6 +4,7 @@ import { SearchMode } from "@/components/database/SearchMode";
 
 import { WordsInput } from "@/components/database/WordsInput";
 import { StatsInput } from "@/components/database/StatsInput";
+import { SearchWord } from "@/components/database/SearchWord";
 
 export default function DatabasePage() {
   const [selectedMode, setSelectedMode] = React.useState("");
@@ -22,9 +23,6 @@ export default function DatabasePage() {
       >
         <div className="space-y-4">
           <h3 className="">What do you want to search for?</h3>
-          <p className="text-disabledText">
-            Select the search mode to continue automatically
-          </p>
         </div>
         <div className="w-full flex rounded space-y-10 flex-col">
           <SearchMode
@@ -46,9 +44,13 @@ export default function DatabasePage() {
 
       {selectedMode == "stats" && (
         <StatsInput
-          selectedMode={selectedMode}
+          // selectedMode={selectedMode}
           handleSelectMode={handleSelectMode}
         />
+        // <SearchWord
+        //   // selectedMode={selectedMode}
+        //   handleSelectMode={handleSelectMode}
+        // />
       )}
     </section>
   );
