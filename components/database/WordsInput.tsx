@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { CheckboxGroup, Checkbox } from "@heroui/checkbox";
 import { AgeBand } from "./AgeBand";
 import { Textarea } from "@heroui/input";
@@ -16,6 +16,7 @@ interface WordsInput {
 
 export const WordsInput: React.FC<WordsInput> = ({ handleSelectMode }) => {
   const [isMobile, setisMobile] = React.useState(true);
+  const [isText, setIsText] = React.useState(false);
 
   const [tooltipStates, setTooltipStates] = React.useState<{
     [key: string]: boolean;
@@ -60,10 +61,12 @@ export const WordsInput: React.FC<WordsInput> = ({ handleSelectMode }) => {
 
   const handleTextareaClear = () => {
     setWords([]);
+    setIsText(false);
   };
 
   const handleClear = () => {
     handleSelectMode("");
+    setIsText(false);
   };
 
   const handleUploadClick = () => {
@@ -179,8 +182,12 @@ export const WordsInput: React.FC<WordsInput> = ({ handleSelectMode }) => {
                 minRows={8}
                 fullWidth
                 isClearable
+                isRequired
                 value={words.join("\n")}
-                onChange={(e) => setWords(e.target.value.split("\n"))}
+                onChange={(e) => {
+                  setWords(e.target.value.split("\n"));
+                  setIsText(true);
+                }}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
                     const newWord = e.currentTarget.value
@@ -189,6 +196,7 @@ export const WordsInput: React.FC<WordsInput> = ({ handleSelectMode }) => {
                       ?.trim();
                     if (newWord && !words.includes(newWord)) {
                       setWords((prevWords) => [...prevWords, newWord]);
+                      setIsText(true);
                     }
                   }
                 }}
@@ -213,6 +221,8 @@ export const WordsInput: React.FC<WordsInput> = ({ handleSelectMode }) => {
           searchCriteria={searchCriteria}
           age={ageBand}
           words={words}
+          approved={isText}
+          searchMode="words"
         />
       </div>
     </div>

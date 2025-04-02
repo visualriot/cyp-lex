@@ -43,6 +43,7 @@ interface SecondaryBtn {
   onPress?: () => void;
   className?: string;
   children: React.ReactNode;
+  disabled?: boolean;
 }
 
 export const SecondaryBtn: React.FC<SecondaryBtn> = ({
@@ -50,6 +51,7 @@ export const SecondaryBtn: React.FC<SecondaryBtn> = ({
   size = "lg",
   className = "",
   children,
+  disabled = false,
 }) => {
   const router = useRouter();
 
@@ -58,6 +60,7 @@ export const SecondaryBtn: React.FC<SecondaryBtn> = ({
       onPress={onPress}
       size={size}
       className={`bg-foreground-100 border-foreground-200 border-2 font-jet font-medium text-sm rounded-lg px-6 hover:!opacity-100 hover:scale-95 smooth ${className}`}
+      disabled={disabled}
     >
       {children}
     </Button>

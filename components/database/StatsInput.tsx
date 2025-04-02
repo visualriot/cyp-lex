@@ -37,16 +37,26 @@ export const StatsInput: React.FC<StatsInput> = ({ handleSelectMode }) => {
     });
   };
 
-  // const {
-  //   ageBand,
-  //   setAgeBand,
-  //   words,
-  //   handleFileUpload,
-  //   fileInputRef,
-  //   searchCriteria,
-  //   updateCriteria,
-  //   setWords,
-  // } = useSearchCriteria();
+  const handleCheckboxChange = (value: string, checked: boolean) => {
+    setFilters((prev) => {
+      const updatedFilters = { ...prev };
+      const currentValues = Array.isArray(updatedFilters.mcPoS)
+        ? updatedFilters.mcPoS
+        : []; // Ensure mcPoS is treated as an array
+
+      if (checked) {
+        // Add the selected value
+        updatedFilters.mcPoS = [...currentValues, value];
+      } else {
+        // Remove the unselected value
+        updatedFilters.mcPoS = currentValues.filter(
+          (item: string) => item !== value
+        );
+      }
+
+      return updatedFilters;
+    });
+  };
 
   useEffect(() => {
     const handleResize = () => {
@@ -105,30 +115,72 @@ export const StatsInput: React.FC<StatsInput> = ({ handleSelectMode }) => {
       setTooltipStates((prevStates) => ({ ...prevStates, [id]: false })),
   });
 
-  const generateMarks = (maxValue: number, step: number) => {
+  // const generateMarks = (maxValue: number, step: number) => {
+  //   const marks = [];
+  //   for (let i = 1; i <= maxValue; i += step) {
+  //     let label;
+  //     let value;
+  //     if (i === 1) {
+  //       value = i;
+  //       label = 1; // Ensure the first label is always 1
+  //     } else if (maxValue >= 10) {
+  //       value = i - 1;
+  //       label = value.toString();
+  //       // label = Math.floor(i / 10) * 10; // Round down to the nearest 10
+  //     } else {
+  //       value = i;
+  //       label = i; // Use exact values
+  //     }
+  //     marks.push({
+  //       value: value,
+  //       label: label.toString(),
+  //     });
+  //   }
+
+  //   // Ensure the last value is included
+  //   if (maxValue >= 10 && marks[marks.length - 1].value !== maxValue) {
+  //     marks.push({
+  //       value: maxValue,
+  //       label: maxValue.toString(),
+  //     });
+  //   }
+
+  //   return marks;
+  // };
+
+  const generateDynamicMarks = (
+    minValue: number,
+    maxValue: number,
+    step: number
+  ) => {
+    const range = maxValue - minValue;
+
+    // Determine the number of marks based on the range
+    let interval;
+    if (range <= 10) {
+      interval = 1; // For small ranges, mark every step
+    } else if (range <= 58) {
+      interval = 5; // For ranges like 1-58, mark every 5 steps
+    } else if (range <= 100) {
+      interval = 10; // For ranges like 0-100, mark every 10 steps
+    } else {
+      // For large ranges, calculate an interval to limit marks to 10-16
+      const maxMarks = 16;
+      interval = Math.ceil(range / maxMarks);
+      interval = Math.max(interval, step); // Ensure interval is at least the step size
+    }
+
+    // Generate marks
     const marks = [];
-    for (let i = 1; i <= maxValue; i += step) {
-      let label;
-      let value;
-      if (i === 1) {
-        value = i;
-        label = 1; // Ensure the first label is always 1
-      } else if (maxValue >= 10) {
-        value = i - 1;
-        label = value.toString();
-        // label = Math.floor(i / 10) * 10; // Round down to the nearest 10
-      } else {
-        value = i;
-        label = i; // Use exact values
-      }
+    for (let i = minValue; i <= maxValue; i += interval) {
       marks.push({
-        value: value,
-        label: label.toString(),
+        value: i,
+        label: i.toString(),
       });
     }
 
-    // Ensure the last value is included
-    if (maxValue >= 10 && marks[marks.length - 1].value !== maxValue) {
+    // Ensure the last value (maxValue) is included
+    if (marks[marks.length - 1].value !== maxValue) {
       marks.push({
         value: maxValue,
         label: maxValue.toString(),
@@ -187,7 +239,7 @@ export const StatsInput: React.FC<StatsInput> = ({ handleSelectMode }) => {
                         value
                       )
                     }
-                    marks={generateMarks(stat.maxValue ?? 100, stat.step ?? 1)}
+                    marks={stat.marks}
                   />
                 </div>
               );
@@ -211,11 +263,8 @@ export const StatsInput: React.FC<StatsInput> = ({ handleSelectMode }) => {
                       // onChange={(checked) =>
                       //   updateCriteria(item.value, checked)
                       // }
-                      onChange={(checked) =>
-                        handleFilterChange(
-                          stat.value as keyof SearchCriteria,
-                          checked
-                        )
+                      onChange={(event) =>
+                        handleCheckboxChange(item.value, event.target.checked)
                       }
                       classNames={{
                         wrapper: "fill-accent",
@@ -238,6 +287,8 @@ export const StatsInput: React.FC<StatsInput> = ({ handleSelectMode }) => {
           searchCriteria={filters}
           handleClear={handleClear}
           age={ageBand}
+          approved={true}
+          searchMode="stats"
         />
       </div>
     </div>
