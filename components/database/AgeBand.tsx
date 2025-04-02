@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 interface AgeBandProps {
   ageBand: string;
@@ -44,11 +44,6 @@ export const AgeBand: React.FC<AgeBandProps> = ({ ageBand, setAgeBand }) => {
         break;
     }
   };
-
-  useEffect(() => {
-    console.log("Age band changed to", selectedAge);
-    console.log("Age band changed to", ageBand);
-  }, [selectedAge, ageBand]);
 
   return (
     <div className="flex flex-col space-y-4">

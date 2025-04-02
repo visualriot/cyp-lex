@@ -12,7 +12,11 @@ export async function POST(request: Request) {
     const id = Date.now().toString();
 
     // Save the data in memory (replace with database logic in production)
-    searchDataStore[id] = { searchCriteria, words, age };
+    searchDataStore[id] = {
+      searchCriteria,
+      age,
+      ...(words && { words }), // Only include `words` if it exists
+    };
 
     // Return the unique ID
     return NextResponse.json({ id });

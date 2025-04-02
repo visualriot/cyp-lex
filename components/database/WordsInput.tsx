@@ -33,10 +33,6 @@ export const WordsInput: React.FC<WordsInput> = ({ handleSelectMode }) => {
     setWords,
   } = useSearchCriteria();
 
-  useEffect(() => {
-    console.log("search criteria: ", searchCriteria);
-  }, [searchCriteria]);
-
   // FRONT END MECHANICS ------------------------------------------------------------------------------------------------------------------------------------
 
   useEffect(() => {

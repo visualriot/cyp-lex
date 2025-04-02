@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
-
 import { SearchCriteria } from "@/app/types/data";
-import { useSearchCriteria } from "@/app/hooks/useSearchCriteria";
 
 import { CheckboxGroup, Checkbox } from "@heroui/checkbox";
 import { Slider } from "@heroui/slider";
@@ -21,13 +19,36 @@ export const StatsInput: React.FC<StatsInput> = ({ handleSelectMode }) => {
   const [tooltipStates, setTooltipStates] = React.useState<{
     [key: string]: boolean;
   }>({});
+  const [filters, setFilters] = useState<Partial<SearchCriteria>>({});
+  const [ageBand, setAgeBand] = useState<string>("all");
 
-  const { ageBand, setAgeBand, searchCriteria, updateCriteria } =
-    useSearchCriteria("stats");
+  const handleFilterChange = (field: keyof SearchCriteria, value: any) => {
+    setFilters((prev) => {
+      const updatedFilters = { ...prev };
 
-  const [selectedCheckboxes, setSelectedCheckboxes] = React.useState<string[]>(
-    []
-  );
+      if (!value || (Array.isArray(value) && value.length === 0)) {
+        // Remove the filter if no value is provided
+        delete updatedFilters[field];
+      } else {
+        updatedFilters[field] = value;
+      }
+
+      return updatedFilters;
+    });
+
+    console.log("Updated filters:", filters);
+  };
+
+  // const {
+  //   ageBand,
+  //   setAgeBand,
+  //   words,
+  //   handleFileUpload,
+  //   fileInputRef,
+  //   searchCriteria,
+  //   updateCriteria,
+  //   setWords,
+  // } = useSearchCriteria();
 
   useEffect(() => {
     const handleResize = () => {
@@ -39,46 +60,12 @@ export const StatsInput: React.FC<StatsInput> = ({ handleSelectMode }) => {
   }, []);
 
   // SEARCH CRITERIA HANDLERS -----------------------------------------------------------------------------
-  // const addAgeToSearchCriteria = (age: string) => {
-  //   setSearchCriteria((prevCriteria) => ({
-  //     ...prevCriteria,
-  //     age: ageBand,
-  //   }));
-  // };
-
-  // useEffect(() => {
-  //   addAgeToSearchCriteria(ageBand);
-  //   console.log("Current search criteria", searchCriteria);
-  // }, [ageBand]);
-
-  // const handleCheckboxChange = (value: string) => {
-  //   setSelectedCheckboxes((prevSelected) =>
-  //     prevSelected.includes(value)
-  //       ? prevSelected.filter((item) => item !== value)
-  //       : [...prevSelected, value]
-  //   );
-  //   setSearchCriteria((prevCriteria) => ({
-  //     ...prevCriteria,
-  //     partOfSpeech: selectedCheckboxes.includes(value)
-  //       ? selectedCheckboxes.filter((item) => item !== value)
-  //       : [...selectedCheckboxes, value],
-  //   }));
-  // };
-
-  // const handleSliderChange = (
-  //   key: keyof StatsSearchCriteria,
-  //   value: number | number[]
-  // ) => {
-  //   if (!key || !value) return;
-  //   setSearchCriteria((prevCriteria) => ({
-  //     ...prevCriteria,
-  //     [key]: Array.isArray(value) ? value : [value, value],
-  //   }));
-  // };
 
   // CLEAR BUTTON HANDLER ---------------------------------------------------------------------------------
   const handleClear = () => {
     handleSelectMode("");
+    setFilters({});
+    setAgeBand("all");
   };
 
   // TOOLTIP HANDLERS --------------------------------------------------------------------------------------
@@ -153,6 +140,8 @@ export const StatsInput: React.FC<StatsInput> = ({ handleSelectMode }) => {
     return marks;
   };
 
+  console.log("Current filters", filters);
+
   return (
     <div className="space-y-8 w-full flex flex-col">
       <div className="space-y-8 w-full flex flex-col">
@@ -196,13 +185,12 @@ export const StatsInput: React.FC<StatsInput> = ({ handleSelectMode }) => {
                     minValue={stat.minValue ?? 0}
                     maxValue={stat.maxValue ?? 100}
                     step={stat.step}
-                    onChange={(value) => updateCriteria(stat.value, value)}
-                    // onChangeEnd={(value) =>
-                    //   handleSliderChange(
-                    //     stat.value as keyof StatsSearchCriteria,
-                    //     value
-                    //   )
-                    // }
+                    onChange={(value) =>
+                      handleFilterChange(
+                        stat.value as keyof SearchCriteria,
+                        value
+                      )
+                    }
                     marks={generateMarks(stat.maxValue ?? 100, stat.step ?? 1)}
                   />
                 </div>
@@ -224,8 +212,14 @@ export const StatsInput: React.FC<StatsInput> = ({ handleSelectMode }) => {
                       key={item.id}
                       value={item.value}
                       // onChange={() => handleCheckboxChange(item.value)}
+                      // onChange={(checked) =>
+                      //   updateCriteria(item.value, checked)
+                      // }
                       onChange={(checked) =>
-                        updateCriteria(item.value, checked)
+                        handleFilterChange(
+                          stat.value as keyof SearchCriteria,
+                          checked
+                        )
                       }
                       classNames={{
                         wrapper: "fill-accent",
@@ -243,7 +237,12 @@ export const StatsInput: React.FC<StatsInput> = ({ handleSelectMode }) => {
         </div>
 
         {/* SUBMIT BUTTONS */}
-        <Submit searchCriteria={searchCriteria} handleClear={handleClear} />
+        <Submit
+          // searchCriteria={filters}
+          searchCriteria={filters}
+          handleClear={handleClear}
+          age={ageBand}
+        />
       </div>
     </div>
   );
