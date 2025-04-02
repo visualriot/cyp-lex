@@ -17,10 +17,6 @@ export const useSearchCriteria = () => {
       ...prev,
       [field]: value,
     }));
-    console.log("Updated search criteria:", {
-      ...searchCriteria,
-      [field]: value,
-    });
   };
 
   // Handle file upload (CSV/XLSX)

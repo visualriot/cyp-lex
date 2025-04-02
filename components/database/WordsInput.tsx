@@ -190,8 +190,6 @@ export const WordsInput: React.FC<WordsInput> = ({ handleSelectMode }) => {
                     if (newWord && !words.includes(newWord)) {
                       setWords((prevWords) => [...prevWords, newWord]);
                     }
-                    console.log("Words:", words);
-                    console.log("search criteria: ", searchCriteria);
                   }
                 }}
                 onClear={handleTextareaClear}

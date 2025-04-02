@@ -241,13 +241,7 @@ export default function ResultsPage() {
   useEffect(() => {
     if (!data || !data.results) return;
 
-    console.log("Fetched data:", data);
-
-    console.log("words: ", data.words);
-
     const searchMode = data.words.length === 0 ? "stats" : "words";
-
-    console.log("Search mode:", searchMode);
 
     // Generate headers based on search criteria
     const generatedHeaders =

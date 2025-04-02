@@ -11,7 +11,6 @@ export const SearchMode: React.FC<SearchMode> = ({
   selectedMode,
   handleSelectMode,
 }) => {
-  console.log("selectedMode", selectedMode);
   return (
     <div className="flex flex-col space-y-4">
       <div className="relative w-full bg-foreground-200 rounded-lg">

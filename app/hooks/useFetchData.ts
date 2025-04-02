@@ -79,12 +79,7 @@ export const useFetchData = (id: string | null) => {
         const response = await fetch(`/api/saveSearch?id=${id}`);
         if (!response.ok) throw new Error("Failed to fetch search data");
 
-        console.log("Fetched response from /api/saveSearch:", response);
-
         const result = await response.json();
-
-        console.log("Fetched result:", result);
-
         const searchMode = result.words ? "words" : "stats";
 
         const endpoint = result.words ? "/api/searchWords" : "/api/filterWords"; // Determine the endpoint based on the presence of words
@@ -100,8 +95,6 @@ export const useFetchData = (id: string | null) => {
                 ageBand: result.age,
               });
 
-        console.log("Constructed body:", body); // Debugging line
-
         if (!body) {
           throw new Error("Failed to construct request body");
         }
@@ -115,8 +108,6 @@ export const useFetchData = (id: string | null) => {
           // body: JSON.stringify({ words: result.words, ageBand: result.age }),
           body: body,
         });
-
-        console.log("Fetched response from search endpoint:", searchResponse);
 
         if (!searchResponse.ok)
           throw new Error("Failed to fetch search results");

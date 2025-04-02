@@ -90,8 +90,6 @@ export const Submit: React.FC<SubmitProps> = ({
 }) => {
   const router = useRouter();
 
-  console.log("Submitted search criteria:", searchCriteria);
-
   const handleSubmit = async () => {
     try {
       const body = words?.length

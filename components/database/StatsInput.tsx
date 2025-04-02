@@ -35,8 +35,6 @@ export const StatsInput: React.FC<StatsInput> = ({ handleSelectMode }) => {
 
       return updatedFilters;
     });
-
-    console.log("Updated filters:", filters);
   };
 
   // const {
@@ -139,8 +137,6 @@ export const StatsInput: React.FC<StatsInput> = ({ handleSelectMode }) => {
 
     return marks;
   };
-
-  console.log("Current filters", filters);
 
   return (
     <div className="space-y-8 w-full flex flex-col">
