@@ -222,6 +222,7 @@ export const WordsInput: React.FC<WordsInput> = ({ handleSelectMode }) => {
           age={ageBand}
           words={words}
           approved={isText}
+          searchMode="words"
         />
       </div>
     </div>

@@ -40,6 +40,13 @@ export async function POST(request: Request) {
     // Load the CSV data for the specified ageBand
     const csvData = (await loadCSVData(ageBand)) as Record<string, any>[];
 
+    const longestWord = csvData.reduce((longest, row) => {
+      const word = row["Word"] || ""; // Ensure "Word" exists
+      return word.length > longest.length ? word : longest;
+    }, "");
+
+    console.log("Longest word in the dataset:", longestWord);
+
     // Apply filters dynamically based on searchCriteria
     const filteredResults = csvData.filter((row) => {
       for (const key in searchCriteria) {

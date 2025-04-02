@@ -194,6 +194,8 @@ export default function ResultsPage() {
           isHeaderSticky
           fullWidth
           layout="auto"
+          // isVirtualized
+          maxTableHeight={600}
         >
           <TableHeader>
             {headers.map((header) => (

@@ -11,6 +11,7 @@ interface SubmitProps {
   words?: string[];
   age: string;
   approved?: boolean;
+  searchMode: string;
 }
 
 export const Submit: React.FC<SubmitProps> = ({
@@ -19,6 +20,7 @@ export const Submit: React.FC<SubmitProps> = ({
   age,
   words,
   approved,
+  searchMode,
 }) => {
   const router = useRouter();
   const [approval, setApproval] = React.useState(true);
@@ -29,7 +31,7 @@ export const Submit: React.FC<SubmitProps> = ({
   const handleSubmit = async () => {
     if (!approval) return;
 
-    if (!words || words.length === 0) {
+    if (searchMode === "words" && (!words || words.length === 0)) {
       setErrorMessage("Please enter words in the text area before submitting.");
       showAlert();
       return; // Prevent submission
