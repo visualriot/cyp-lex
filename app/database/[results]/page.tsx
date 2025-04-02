@@ -13,20 +13,14 @@ import {
   TableRow,
   TableCell,
 } from "@heroui/table";
-import { Spinner } from "@heroui/spinner";
 import { SecondaryBtn } from "@/components/buttons";
 import { DoneIcon, DownloadIcon, CopyIcon } from "@/components/icons";
-import { Alert } from "@heroui/alert";
-import { Skeleton } from "@heroui/skeleton";
-
-type AlertColor = "success" | "danger";
 
 export default function ResultsPage() {
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
 
-  const [isAlertVisible, setIsAlertVisible] = useState(false);
-  const [alertColor, setAlertColor] = useState<AlertColor>("success");
+  const [isCopied, setIsCopied] = useState(false);
   const [headers, setHeaders] = useState<{ key: string; label: string }[]>([]);
 
   const { data = [], loading, error } = useFetchData(id);
@@ -88,11 +82,14 @@ export default function ResultsPage() {
     const tableData = generateTableData("\t");
     navigator.clipboard.writeText(tableData).then(
       () => {
-        showAlert("success");
+        setIsCopied(true);
+        setTimeout(() => {
+          setIsCopied(false);
+        }, 2000); // Reset after 2 seconds
       },
       (err) => {
+        setIsCopied(false);
         console.error("Failed to copy table data: ", err);
-        showAlert("danger");
       }
     );
   };
@@ -110,33 +107,10 @@ export default function ResultsPage() {
     document.body.removeChild(link);
   };
 
-  const showAlert = (color: AlertColor) => {
-    setAlertColor(color);
-    setIsAlertVisible(true);
-    setTimeout(() => {
-      setIsAlertVisible(false);
-    }, 3000);
-  };
-
   if (error) return <div className="text-red-500">{error}</div>;
-
-  // if (loading) return <Spinner label="Loading..." />;
 
   return (
     <section className="results-page w-full flex flex-col gap-y-4 lg:gap-y-8 ">
-      {isAlertVisible && alertColor === "danger" && (
-        <div className="absolute left-4 bottom-12 z-50">
-          <Alert
-            color={alertColor}
-            title={
-              alertColor === "danger"
-                ? "Failed to copy table data"
-                : "Copied to clipboard successfully!"
-            }
-          />
-        </div>
-      )}
-
       <div className="w-full flex flex-col lg:flex-row justify-between items-center space-y-4 lg:space-y-0">
         <div className="flex flex-col lg:w-1/2">
           <h3>Search Results</h3>
@@ -160,8 +134,8 @@ export default function ResultsPage() {
             className={loading ? "animate-pulse" : ""}
             disabled={loading}
           >
-            {isAlertVisible ? <DoneIcon size={12} /> : <CopyIcon />}
-            {isAlertVisible ? "Copied to clipboard" : "Copy all"}
+            {isCopied ? <DoneIcon size={12} /> : <CopyIcon />}
+            {isCopied ? "Copied to clipboard" : "Copy all"}
           </SecondaryBtn>
           <SecondaryBtn
             onPress={downloadTableData}
