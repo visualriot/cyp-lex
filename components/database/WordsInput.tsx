@@ -1,4 +1,4 @@
-import React, { use, useEffect } from "react";
+import React, { useEffect } from "react";
 import { CheckboxGroup, Checkbox } from "@heroui/checkbox";
 import { AgeBand } from "./AgeBand";
 import { Textarea } from "@heroui/input";
@@ -8,7 +8,6 @@ import { Tooltip } from "@heroui/tooltip";
 import { Submit } from "./Submit";
 import { Button } from "@heroui/button";
 import { stats } from "@/public/stats/stats";
-import { SearchCriteria } from "@/app/types/data";
 import { useSearchCriteria } from "@/app/hooks/useSearchCriteria";
 
 interface WordsInput {
@@ -16,27 +15,29 @@ interface WordsInput {
 }
 
 export const WordsInput: React.FC<WordsInput> = ({ handleSelectMode }) => {
+  const [isMobile, setisMobile] = React.useState(true);
+
+  const [tooltipStates, setTooltipStates] = React.useState<{
+    [key: string]: boolean;
+  }>({});
+
+  // BACKEND MECHANICS ------------------------------------------------------------------------------------------------------------------------------------
   const {
     ageBand,
     setAgeBand,
     words,
-    handleWordChange,
     handleFileUpload,
     fileInputRef,
     searchCriteria,
     updateCriteria,
     setWords,
-  } = useSearchCriteria("words");
-
-  const [isMobile, setisMobile] = React.useState(true);
+  } = useSearchCriteria();
 
   useEffect(() => {
-    console.log("search params: ", searchCriteria);
+    console.log("search criteria: ", searchCriteria);
   }, [searchCriteria]);
 
-  const [tooltipStates, setTooltipStates] = React.useState<{
-    [key: string]: boolean;
-  }>({});
+  // FRONT END MECHANICS ------------------------------------------------------------------------------------------------------------------------------------
 
   useEffect(() => {
     const handleResize = () => {
@@ -61,18 +62,18 @@ export const WordsInput: React.FC<WordsInput> = ({ handleSelectMode }) => {
     };
   }, []);
 
+  const handleTextareaClear = () => {
+    setWords([]);
+  };
+
   const handleClear = () => {
     handleSelectMode("");
   };
 
-  const handleButtonClick = () => {
+  const handleUploadClick = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
     }
-  };
-
-  const handleTextareaClear = () => {
-    setWords([]);
   };
 
   const commonTooltipProps = (id: string, content: string) => ({
@@ -121,7 +122,7 @@ export const WordsInput: React.FC<WordsInput> = ({ handleSelectMode }) => {
               }}
             >
               {stats
-                .filter((info) => !info.skipWords) // Filter out items with skipWords
+                // .filter((info) => !info.skipWords) // Filter out items with skipWords
                 .map((info) => (
                   <div className="space-x-1 flex flex-row" key={info.id}>
                     <Checkbox
@@ -132,10 +133,10 @@ export const WordsInput: React.FC<WordsInput> = ({ handleSelectMode }) => {
                           info.value as keyof typeof searchCriteria
                         ]
                       }
-                      onChange={(checked) =>
+                      onChange={(event) =>
                         updateCriteria(
                           info.value as keyof typeof searchCriteria,
-                          checked
+                          event.target.checked
                         )
                       }
                     >
@@ -183,8 +184,20 @@ export const WordsInput: React.FC<WordsInput> = ({ handleSelectMode }) => {
                 fullWidth
                 isClearable
                 value={words.join("\n")}
-                // onChange={(e) => setWords(e.target.value.split("\n"))}
-                onChange={(e) => handleWordChange(e.target.value)}
+                onChange={(e) => setWords(e.target.value.split("\n"))}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    const newWord = e.currentTarget.value
+                      .split("\n")
+                      .pop()
+                      ?.trim();
+                    if (newWord && !words.includes(newWord)) {
+                      setWords((prevWords) => [...prevWords, newWord]);
+                    }
+                    console.log("Words:", words);
+                    console.log("search criteria: ", searchCriteria);
+                  }
+                }}
                 onClear={handleTextareaClear}
               />
               <input
@@ -195,7 +208,7 @@ export const WordsInput: React.FC<WordsInput> = ({ handleSelectMode }) => {
                 className="hidden"
                 id="file-upload"
               />
-              <SecondaryBtn onPress={handleButtonClick}>
+              <SecondaryBtn onPress={handleUploadClick}>
                 <UploadIcon /> upload excel file
               </SecondaryBtn>
             </div>

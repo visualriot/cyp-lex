@@ -2,14 +2,14 @@ export const stats = [
   {
     id: 1,
     name: "Lemma",
-    value: "lemma",
+    value: "Lemma",
     tooltip: "Uninflected word form",
     type: "checkbox",
   },
   {
     id: 2,
     name: "Most common part of speech",
-    value: "mcpos",
+    value: "mcPoS",
     type: "checkbox-group",
   },
   {
@@ -25,7 +25,7 @@ export const stats = [
   {
     id: 4,
     name: "Raw frequency",
-    value: "raw_freq",
+    value: "Count",
     tooltip:
       "Number of times the word is encountered in the selected age range",
     type: "slider",
@@ -36,7 +36,7 @@ export const stats = [
   {
     id: 5,
     name: "Zipf frequency",
-    value: "zipf_freq",
+    value: "Zipf_freq",
     tooltip: "Standardised frequency metric in the selected age range",
     type: "slider",
     minValue: 1,
@@ -46,7 +46,7 @@ export const stats = [
   {
     id: 6,
     name: "Book raw count",
-    value: "book_raw",
+    value: "CD_book_count_raw",
     tooltip:
       "Number of books in the selected age range the word is encountered in",
     type: "slider",
@@ -57,7 +57,7 @@ export const stats = [
   {
     id: 7,
     name: "Book percentage",
-    value: "book_perc",
+    value: "CD_book_perc_raw",
     tooltip:
       "Percentage of books in the selected age range the word is encountered in",
     type: "slider",
@@ -77,7 +77,7 @@ export const stats = [
   {
     id: 9,
     name: "Zipf frequency in CBeebies TV programmes (ages 0-6)",
-    value: "CBeebies_zipf",
+    value: "CBeebies_log",
     type: "slider",
     minValue: 1,
     maxValue: 8,
@@ -95,7 +95,7 @@ export const stats = [
   {
     id: 11,
     name: "Zipf frequency in CBBC TV programmes (ages 6-12)",
-    value: "CBBC_zipf",
+    value: "CBBC_log",
     type: "slider",
     minValue: 1,
     maxValue: 8,
@@ -104,7 +104,7 @@ export const stats = [
   {
     id: 12,
     name: "Raw frequency in TV programmes (all ages)",
-    value: "SUBTLEXUK_raw",
+    value: "SubtlexUK_raw",
     type: "slider",
     minValue: 0,
     maxValue: 100,
@@ -113,7 +113,7 @@ export const stats = [
   {
     id: 13,
     name: "Zipf frequency in TV programmes (all ages)",
-    value: "SUBTLEXUK_zipf",
+    value: "SubtlexUK_log",
     type: "slider",
     minValue: 1,
     maxValue: 8,

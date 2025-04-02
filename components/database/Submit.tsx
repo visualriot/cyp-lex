@@ -3,7 +3,6 @@ import { useRouter } from "next/navigation";
 import { PrimaryBtn, TertiaryBtn } from "../buttons";
 import { ClearIcon } from "../icons";
 import { SearchCriteria } from "@/app/types/data";
-import { fetchData } from "@/app/utils/fetchData";
 
 interface SubmitProps {
   handleClear: () => void;
@@ -20,38 +19,26 @@ export const Submit: React.FC<SubmitProps> = ({
 }) => {
   const router = useRouter();
 
-  const handleSubmit = () => {
-    const queryParams = new URLSearchParams();
-
-    // ✅ Map through search criteria and add to queryParams
-    Object.entries(searchCriteria).forEach(([key, value]) => {
-      if (Array.isArray(value)) {
-        value.forEach((v) => queryParams.append(key, v.toString()));
-      } else if (value !== undefined && value !== null) {
-        queryParams.set(key, value.toString());
-      }
-    });
-
-    // ✅ Push query params to the URL
-    router.push(`/database/results?${queryParams.toString()}`);
-  };
-
-  const handleSearch = async () => {
+  const handleSubmit = async () => {
     try {
-      const csvData = await fetchData(`/data/cyplex_${age}.csv`);
-
-      if (!words) return;
-
-      const results = words.map((word) => {
-        return (
-          csvData.find((row) => row.word === word) || { word, notFound: true }
-        );
+      // Send the data to the API
+      const response = await fetch("/api/saveSearch", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ searchCriteria, words, age }),
       });
 
-      console.log("Search Results:", results);
-      // Display results in the UI
+      if (response.ok) {
+        const { id } = await response.json();
+        // Navigate to the results page with the unique ID
+        router.push(`/database/results?id=${id}`);
+      } else {
+        console.error("Failed to save search data");
+      }
     } catch (error) {
-      console.error("Error during search:", error);
+      console.error("Error submitting data:", error);
     }
   };
 
@@ -59,7 +46,7 @@ export const Submit: React.FC<SubmitProps> = ({
     <div className="flex flex-col gap-4">
       <PrimaryBtn
         className="py-10 text-xl font-semibold"
-        onPress={handleSearch}
+        onPress={handleSubmit}
       >
         Submit
       </PrimaryBtn>

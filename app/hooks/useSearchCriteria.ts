@@ -1,11 +1,9 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import Papa from "papaparse";
 import * as XLSX from "xlsx";
 import { SearchCriteria } from "@/app/types/data";
 
-export type SearchMode = "words" | "stats";
-
-export const useSearchCriteria = (mode: SearchMode) => {
+export const useSearchCriteria = () => {
   const [ageBand, setAgeBand] = useState<string>("all");
   const [searchCriteria, setSearchCriteria] = useState<Partial<SearchCriteria>>(
     {}
@@ -19,17 +17,10 @@ export const useSearchCriteria = (mode: SearchMode) => {
       ...prev,
       [field]: value,
     }));
-  };
-
-  // Handle text input for words
-  const handleWordChange = (text: string) => {
-    // setWords(text.split("\n").filter((word) => word.trim() !== ""));
-    setWords(
-      text
-        .split("\n")
-        .map((word) => word.trim())
-        .filter(Boolean)
-    );
+    console.log("Updated search criteria:", {
+      ...searchCriteria,
+      [field]: value,
+    });
   };
 
   // Handle file upload (CSV/XLSX)
@@ -66,7 +57,6 @@ export const useSearchCriteria = (mode: SearchMode) => {
     searchCriteria,
     updateCriteria,
     words,
-    handleWordChange,
     handleFileUpload,
     fileInputRef,
     setWords,

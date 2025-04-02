@@ -36,21 +36,11 @@ export default function DatabasePage() {
 
       {/* Input */}
       {selectedMode == "words" && (
-        <WordsInput
-          // selectedMode={selectedMode}
-          handleSelectMode={handleSelectMode}
-        />
+        <WordsInput handleSelectMode={handleSelectMode} />
       )}
 
       {selectedMode == "stats" && (
-        <StatsInput
-          // selectedMode={selectedMode}
-          handleSelectMode={handleSelectMode}
-        />
-        // <SearchWord
-        //   // selectedMode={selectedMode}
-        //   handleSelectMode={handleSelectMode}
-        // />
+        <StatsInput handleSelectMode={handleSelectMode} />
       )}
     </section>
   );
