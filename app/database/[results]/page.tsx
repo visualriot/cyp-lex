@@ -158,7 +158,7 @@ export default function ResultsPage() {
           <SecondaryBtn
             onPress={copyTableData}
             className={loading ? "animate-pulse" : ""}
-            disabled={!loading}
+            disabled={loading}
           >
             {isAlertVisible ? <DoneIcon size={12} /> : <CopyIcon />}
             {isAlertVisible ? "Copied to clipboard" : "Copy all"}
@@ -166,7 +166,7 @@ export default function ResultsPage() {
           <SecondaryBtn
             onPress={downloadTableData}
             className={loading ? "animate-pulse" : ""}
-            disabled={!loading}
+            disabled={loading}
           >
             <DownloadIcon /> Download results
           </SecondaryBtn>
