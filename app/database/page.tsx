@@ -4,7 +4,6 @@ import { SearchMode } from "@/components/database/SearchMode";
 
 import { WordsInput } from "@/components/database/WordsInput";
 import { StatsInput } from "@/components/database/StatsInput";
-import { SearchWord } from "@/components/database/SearchWord";
 
 export default function DatabasePage() {
   const [selectedMode, setSelectedMode] = React.useState("");
