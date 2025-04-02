@@ -39,6 +39,7 @@ export default function ResultsPage() {
 
   const allColumns = {
     Word: "Word",
+    numberOfLetters: "No. of Letters",
     Lemma: "Lemma",
     mcPoS: "mcPoS",
     Count: "Count",
@@ -51,56 +52,34 @@ export default function ResultsPage() {
     CBBC_log: "CBBC_log",
     SubtlexUK_raw: "SubtlexUK_raw",
     SubtlexUK_log: "SubtlexUK_log",
-    numberOfLetters: "number_of_Letters",
   };
 
   useEffect(() => {
-    const fetchSearchCriteria = async () => {
-      if (!id) return;
+    if (!data || !data.searchCriteria) return;
 
-      try {
-        const response = await fetch(`/api/saveSearch?id=${id}`);
-        if (response.ok) {
-          const result = await response.json();
+    // Generate headers based on search criteria
+    const generatedHeaders = Object.keys(allColumns)
+      .filter((key) => data.searchCriteria[key] === true)
+      .map((key) => ({
+        key,
+        label: allColumns[key as keyof typeof allColumns],
+      }));
 
-          // Set the search criteria, words, and age
-          setSearchCriteria(result.searchCriteria || {});
-          setWords(result.words || []);
-          setAge(result.age || "all");
-          console.log("search criteria on results: ", result.searchCriteria);
+    if (!generatedHeaders.some((header) => header.key === "Word")) {
+      generatedHeaders.unshift({ key: "Word", label: allColumns.Word });
+    }
 
-          // Generate headers based on search criteria
-          const generatedHeaders = Object.keys(allColumns)
-            .filter((key) => result.searchCriteria[key] === true)
-            .map((key) => ({
-              key,
-              label: allColumns[key as keyof typeof allColumns],
-            }));
-
-          if (!generatedHeaders.some((header) => header.key === "word")) {
-            generatedHeaders.unshift({ key: "word", label: allColumns.Word });
-          }
-
-          setHeaders(generatedHeaders);
-        } else {
-          console.error("Failed to fetch search criteria");
-        }
-      } catch (error) {
-        console.error("Error fetching search criteria:", error);
-      }
-    };
-
-    fetchSearchCriteria();
-  }, [id]);
+    setHeaders(generatedHeaders);
+  }, [data]);
 
   if (loading) return <Spinner label="Loading..." />;
   if (error) return <div className="text-red-500">{error}</div>;
 
   const generateTableData = (delimiter: string) => {
     const headerLabels = headers.map((header) => header.label);
-    const rows = data.map((item: SearchCriteria) =>
+    const rows = (data.results || []).map((item: SearchCriteria) =>
       headers
-        .map((header) => item[header.key as keyof SearchCriteria])
+        .map((header) => item[header.key as keyof SearchCriteria] || "N/A")
         .join(delimiter)
     );
     return [headerLabels.join(delimiter), ...rows].join("\n");
@@ -159,7 +138,8 @@ export default function ResultsPage() {
         <div className="flex flex-col lg:w-1/2">
           <h3>Search Results</h3>
           <p>
-            Your search returned <span>{data ? data.length : "0 "}</span> words
+            Your search returned{" "}
+            <span>{data.results ? data.results.length : "0 "}</span> words
           </p>
         </div>
         <div className="flex flex-row lg:w-1/2 justify-end items-center space-x-2 lg:space-x-8">
@@ -195,14 +175,14 @@ export default function ResultsPage() {
 
         <TableBody
           isLoading={loading}
-          items={Array.isArray(data) ? data : []}
+          items={data?.results || []}
           loadingContent={<Spinner label="Loading..." />}
         >
-          {(item: SearchCriteria) => (
-            <TableRow key={`${item.Word}-${item.Count}`}>
+          {(item: any) => (
+            <TableRow key={`${item.Word}`}>
               {headers.map((header) => (
                 <TableCell key={header.key}>
-                  {item[header.key as keyof SearchCriteria]}
+                  {item[header.key] || "N/A"}
                 </TableCell>
               ))}
             </TableRow>
