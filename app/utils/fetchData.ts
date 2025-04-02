@@ -14,7 +14,7 @@ export const fetchData = async (filePath: string): Promise<any[]> => {
         header: true, // Assumes the first row contains column headers
         skipEmptyLines: true,
         complete: (results) => resolve(results.data),
-        error: (error) => reject(error),
+        error: (error: any) => reject(error),
       });
     });
   } catch (error) {
