@@ -1,23 +1,47 @@
 import React from "react";
 
-interface AgeBand {}
+interface AgeBandProps {
+  ageBand: string;
+  setAgeBand: (age: string) => void;
+}
 
-export const AgeBand: React.FC<AgeBand> = ({}) => {
-  const ages = ["all ages", "7-9", "10-12", "13-16"];
-  const [selectedAge, setSelectedAge] = React.useState("all ages");
+export const AgeBand: React.FC<AgeBandProps> = ({ ageBand, setAgeBand }) => {
+  const ages = ["all", "7-9", "10-12", "13"];
+  const [selectedAge, setSelectedAge] = React.useState("all");
 
   const getLeftPosition = (age: string) => {
     switch (age) {
-      case "all ages":
+      case "all":
         return "0%";
       case "7-9":
         return "25%";
       case "10-12":
         return "50%";
-      case "13-16":
+      case "13":
         return "75%";
       default:
         return "0%";
+    }
+  };
+
+  const handleAgeChange = (age: string) => {
+    setSelectedAge(age);
+    switch (age) {
+      case "all":
+        setAgeBand("all");
+        break;
+      case "7-9":
+        setAgeBand("7-9");
+        break;
+      case "10-12":
+        setAgeBand("10-12");
+        break;
+      case "13":
+        setAgeBand("13");
+        break;
+      default:
+        setAgeBand("all");
+        break;
     }
   };
 
@@ -36,7 +60,7 @@ export const AgeBand: React.FC<AgeBand> = ({}) => {
           {ages.map((age) => (
             <button
               key={age}
-              onClick={() => setSelectedAge(age)}
+              onClick={() => handleAgeChange(age)}
               className={`px-4 py-5 rounded-xl uppercase text-sm ${
                 selectedAge === age
                   ? "text-text"

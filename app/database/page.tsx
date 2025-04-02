@@ -22,9 +22,6 @@ export default function DatabasePage() {
       >
         <div className="space-y-4">
           <h3 className="">What do you want to search for?</h3>
-          <p className="text-disabledText">
-            Select the search mode to continue automatically
-          </p>
         </div>
         <div className="w-full flex rounded space-y-10 flex-col">
           <SearchMode
@@ -38,17 +35,11 @@ export default function DatabasePage() {
 
       {/* Input */}
       {selectedMode == "words" && (
-        <WordsInput
-          // selectedMode={selectedMode}
-          handleSelectMode={handleSelectMode}
-        />
+        <WordsInput handleSelectMode={handleSelectMode} />
       )}
 
       {selectedMode == "stats" && (
-        <StatsInput
-          selectedMode={selectedMode}
-          handleSelectMode={handleSelectMode}
-        />
+        <StatsInput handleSelectMode={handleSelectMode} />
       )}
     </section>
   );

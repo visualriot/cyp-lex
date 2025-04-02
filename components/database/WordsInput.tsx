@@ -1,7 +1,5 @@
-import React, { useRef, useEffect, useState } from "react";
-
+import React, { useEffect } from "react";
 import { CheckboxGroup, Checkbox } from "@heroui/checkbox";
-import { CustomCheckbox } from "@/components/checkbox";
 import { AgeBand } from "./AgeBand";
 import { Textarea } from "@heroui/input";
 import { SecondaryBtn } from "../buttons";
@@ -9,81 +7,33 @@ import { UploadIcon, InfoIcon } from "../icons";
 import { Tooltip } from "@heroui/tooltip";
 import { Submit } from "./Submit";
 import { Button } from "@heroui/button";
-import * as XLSX from "xlsx";
-import Papa from "papaparse";
+import { stats } from "@/public/stats/stats";
+import { useSearchCriteria } from "@/app/hooks/useSearchCriteria";
 
 interface WordsInput {
   handleSelectMode: (mode: string) => void;
 }
 
 export const WordsInput: React.FC<WordsInput> = ({ handleSelectMode }) => {
-  const stats = [
-    { id: 1, name: "Lemma", value: "lemma", tooltip: "uninflected form" },
-    {
-      id: 2,
-      name: "Most common part of speech",
-      value: "mcpos",
-    },
-    {
-      id: 3,
-      name: "Raw frequency",
-      value: "raw",
-      tooltip:
-        "number of times the word is encountered in the selected age range",
-    },
-    {
-      id: 4,
-      name: "Zipf frequency",
-      value: "zipf",
-      tooltip: "standardised frequency metric",
-    },
-    {
-      id: 5,
-      name: "Book raw count",
-      value: "book-raw-count",
-      tooltip:
-        "number of books in the selected age range the word is encountered in",
-    },
-    {
-      id: 6,
-      name: "Book percentage",
-      value: "book-percentage",
-      tooltip:
-        "percentage of books in the selected age range the word is encountered in",
-    },
-    {
-      id: 7,
-      name: "Raw frequency in TV: CBeebies (ages 0-6)",
-      value: "raw-cbeebies",
-    },
-    {
-      id: 8,
-      name: "Zipf frequency in TV: CBeebies (ages 0-6)",
-      value: "zipf-cbeebies",
-    },
-    { id: 9, name: "Raw frequency in TV: CBBC (ages 6-12)", value: "raw-cbbc" },
-    {
-      id: 10,
-      name: "Zipf frequency in TV: CBBC (ages 6-12)",
-      value: "zipf-cbbc",
-    },
-    {
-      id: 11,
-      name: "Raw frequency in TV: SUBTLEX-UK (all ages)",
-      value: "raw-subtlex",
-    },
-    {
-      id: 12,
-      name: "Zipf frequency in TV: SUBTLEX-UK (all ages)",
-      value: "zipf-subtlex",
-    },
-  ];
-
   const [isMobile, setisMobile] = React.useState(true);
 
   const [tooltipStates, setTooltipStates] = React.useState<{
     [key: string]: boolean;
   }>({});
+
+  // BACKEND MECHANICS ------------------------------------------------------------------------------------------------------------------------------------
+  const {
+    ageBand,
+    setAgeBand,
+    words,
+    handleFileUpload,
+    fileInputRef,
+    searchCriteria,
+    updateCriteria,
+    setWords,
+  } = useSearchCriteria();
+
+  // FRONT END MECHANICS ------------------------------------------------------------------------------------------------------------------------------------
 
   useEffect(() => {
     const handleResize = () => {
@@ -108,48 +58,18 @@ export const WordsInput: React.FC<WordsInput> = ({ handleSelectMode }) => {
     };
   }, []);
 
-  const [words, setWords] = React.useState<string[]>([]);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const handleTextareaClear = () => {
+    setWords([]);
+  };
 
   const handleClear = () => {
     handleSelectMode("");
   };
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const data = e.target?.result;
-        if (file.type === "text/csv") {
-          Papa.parse(data as string, {
-            complete: (result: Papa.ParseResult<any>) => {
-              const words = result.data.map((row: any) => row[0]);
-              setWords(words);
-            },
-          });
-        } else {
-          const workbook = XLSX.read(data, { type: "binary" });
-          const sheetName = workbook.SheetNames[0];
-          const sheet = workbook.Sheets[sheetName];
-          const json = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-          const words = json.map((row: any) => row[0]);
-          setWords(words);
-        }
-      };
-      reader.readAsBinaryString(file);
-    }
-    event.target.value = "";
-  };
-
-  const handleButtonClick = () => {
+  const handleUploadClick = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
     }
-  };
-
-  const handleTextareaClear = () => {
-    setWords([]);
   };
 
   const commonTooltipProps = (id: string, content: string) => ({
@@ -182,9 +102,9 @@ export const WordsInput: React.FC<WordsInput> = ({ handleSelectMode }) => {
   return (
     <div className="space-y-8 w-full flex flex-col">
       <div className="space-y-8 w-full flex flex-col">
-        <h3 className="">Configure Your Search</h3>
+        <h3 className="">Configure your search</h3>
         <div className="w-full flex  border-foreground-100 rounded  flex-col space-y-16 lg:border-1 lg:shadow-md  lg:p-6 lg:pt-8 lg:pb-16 lg:px-12">
-          <AgeBand />
+          <AgeBand ageBand={ageBand} setAgeBand={setAgeBand} />
 
           {/* checkboxes */}
           <div>
@@ -197,34 +117,50 @@ export const WordsInput: React.FC<WordsInput> = ({ handleSelectMode }) => {
                 label: "font-semibold text-text",
               }}
             >
-              {stats.map((info) => (
-                <div className="space-x-1 flex flex-row" key={info.id}>
-                  <Checkbox value={info.name}>
-                    <div className="flex items-center text-sm">
-                      <span>{info.name}</span>
-                    </div>
-                  </Checkbox>
-                  {info.tooltip && (
-                    <Tooltip
-                      {...commonTooltipProps(info.tooltip, info.tooltip)}
-                      key={info.tooltip}
+              {stats
+                // .filter((info) => !info.skipWords) // Filter out items with skipWords
+                .map((info) => (
+                  <div className="space-x-1 flex flex-row" key={info.id}>
+                    <Checkbox
+                      key={info.id}
+                      value={info.value}
+                      isSelected={
+                        !!searchCriteria[
+                          info.value as keyof typeof searchCriteria
+                        ]
+                      }
+                      onChange={(event) =>
+                        updateCriteria(
+                          info.value as keyof typeof searchCriteria,
+                          event.target.checked
+                        )
+                      }
                     >
-                      <div className="flex items-center hover:opacity-100 transition-opacity opacity-50 z-50">
-                        <Button
-                          className="h-4 w-4 min-w-4 rounded-lg p-0 tooltip-button bg-text"
-                          onPress={() => handleTooltipToggle(info.tooltip)}
-                        >
-                          <InfoIcon
-                            size={10}
-                            className="fill-white"
-                            fill="white"
-                          />
-                        </Button>
+                      <div className="flex items-center text-sm">
+                        <span>{info.name}</span>
                       </div>
-                    </Tooltip>
-                  )}
-                </div>
-              ))}
+                    </Checkbox>
+                    {info.tooltip && (
+                      <Tooltip
+                        {...commonTooltipProps(info.tooltip, info.tooltip)}
+                        key={info.tooltip}
+                      >
+                        <div className="flex items-center hover:opacity-100 transition-opacity opacity-50 z-50">
+                          <Button
+                            className="h-4 w-4 min-w-4 rounded-lg p-0 tooltip-button bg-text"
+                            onPress={() => handleTooltipToggle(info.tooltip)}
+                          >
+                            <InfoIcon
+                              size={10}
+                              className="fill-white"
+                              fill="white"
+                            />
+                          </Button>
+                        </div>
+                      </Tooltip>
+                    )}
+                  </div>
+                ))}
             </CheckboxGroup>
           </div>
           {/* text area */}
@@ -245,6 +181,17 @@ export const WordsInput: React.FC<WordsInput> = ({ handleSelectMode }) => {
                 isClearable
                 value={words.join("\n")}
                 onChange={(e) => setWords(e.target.value.split("\n"))}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    const newWord = e.currentTarget.value
+                      .split("\n")
+                      .pop()
+                      ?.trim();
+                    if (newWord && !words.includes(newWord)) {
+                      setWords((prevWords) => [...prevWords, newWord]);
+                    }
+                  }
+                }}
                 onClear={handleTextareaClear}
               />
               <input
@@ -255,13 +202,18 @@ export const WordsInput: React.FC<WordsInput> = ({ handleSelectMode }) => {
                 className="hidden"
                 id="file-upload"
               />
-              <SecondaryBtn onPress={handleButtonClick}>
+              <SecondaryBtn onPress={handleUploadClick}>
                 <UploadIcon /> upload excel file
               </SecondaryBtn>
             </div>
           </div>
         </div>
-        <Submit handleClear={handleClear} />
+        <Submit
+          handleClear={handleClear}
+          searchCriteria={searchCriteria}
+          age={ageBand}
+          words={words}
+        />
       </div>
     </div>
   );

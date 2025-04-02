@@ -11,7 +11,6 @@ export const SearchMode: React.FC<SearchMode> = ({
   selectedMode,
   handleSelectMode,
 }) => {
-  console.log("selectedMode", selectedMode);
   return (
     <div className="flex flex-col space-y-4">
       <div className="relative w-full bg-foreground-200 rounded-lg">
@@ -37,7 +36,7 @@ export const SearchMode: React.FC<SearchMode> = ({
             } smooth`}
           >
             <div className="flex flex-col lg:flex-row items-center gap-x-2 gap-y-2 justify-center">
-              <QuoteIcon size={16} /> Find characteristics of specific words
+              <QuoteIcon size={16} /> Characteristics of specific words
             </div>
           </button>
           <div className="w-[1px] bg-white opacity-50"></div>
@@ -52,7 +51,7 @@ export const SearchMode: React.FC<SearchMode> = ({
             } smooth`}
           >
             <div className="flex flex-col lg:flex-row items-center gap-x-2 gap-y-2 justify-center">
-              <StatsIcon size={16} /> Find words with specific characteristics
+              <StatsIcon size={16} /> Words with specific characteristics
             </div>
           </button>
         </div>
