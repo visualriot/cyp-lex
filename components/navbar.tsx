@@ -20,7 +20,13 @@ export const Navbar = () => {
       <div className="mx-auto flex justify-between global-width container">
         <div>
           <Link href="/">
-            <Image alt="CYP-LEX Logo" height={96} src="/logo.png" width={160} />
+            <Image
+              alt="CYP-LEX Logo"
+              height={126}
+              width={126}
+              src="/logo.png"
+              priority
+            />
           </Link>
         </div>
         <div>
