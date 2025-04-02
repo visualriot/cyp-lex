@@ -122,8 +122,8 @@ export const stats = [
 ];
 
 export const mcpos = [
-  { id: 1, name: "Noun", value: "noun" },
-  { id: 2, name: "Verb", value: "verb" },
-  { id: 3, name: "Adjective", value: "adjective" },
-  { id: 4, name: "Adverb", value: "adverb" },
+  { id: 1, name: "Noun", value: "NN" },
+  { id: 2, name: "Verb", value: "VB" },
+  { id: 3, name: "Adjective", value: "JJ" },
+  { id: 4, name: "Adverb", value: "RB" },
 ];

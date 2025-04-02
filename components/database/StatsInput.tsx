@@ -37,16 +37,26 @@ export const StatsInput: React.FC<StatsInput> = ({ handleSelectMode }) => {
     });
   };
 
-  // const {
-  //   ageBand,
-  //   setAgeBand,
-  //   words,
-  //   handleFileUpload,
-  //   fileInputRef,
-  //   searchCriteria,
-  //   updateCriteria,
-  //   setWords,
-  // } = useSearchCriteria();
+  const handleCheckboxChange = (value: string, checked: boolean) => {
+    setFilters((prev) => {
+      const updatedFilters = { ...prev };
+      const currentValues = Array.isArray(updatedFilters.mcPoS)
+        ? updatedFilters.mcPoS
+        : []; // Ensure mcPoS is treated as an array
+
+      if (checked) {
+        // Add the selected value
+        updatedFilters.mcPoS = [...currentValues, value];
+      } else {
+        // Remove the unselected value
+        updatedFilters.mcPoS = currentValues.filter(
+          (item: string) => item !== value
+        );
+      }
+
+      return updatedFilters;
+    });
+  };
 
   useEffect(() => {
     const handleResize = () => {
@@ -211,11 +221,8 @@ export const StatsInput: React.FC<StatsInput> = ({ handleSelectMode }) => {
                       // onChange={(checked) =>
                       //   updateCriteria(item.value, checked)
                       // }
-                      onChange={(checked) =>
-                        handleFilterChange(
-                          stat.value as keyof SearchCriteria,
-                          checked
-                        )
+                      onChange={(event) =>
+                        handleCheckboxChange(item.value, event.target.checked)
                       }
                       classNames={{
                         wrapper: "fill-accent",
