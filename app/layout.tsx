@@ -58,15 +58,6 @@ export default function RootLayout({
               >
                 Aleks Rydzkowska
               </a>
-              {/* &nbsp;from&nbsp;{" "}
-              <a
-                href="https://visual-riot.com"
-                target="_blank"
-                rel="noreferrer"
-                className="hover:font-semibold hover:px-1 smooth"
-              >
-                Visual Riot
-              </a> */}
             </footer>
           </div>
         </Providers>

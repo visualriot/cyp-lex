@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import { useFetchData } from "@/app/hooks/useFetchData";
 
@@ -26,6 +26,7 @@ export default function ResultsPage() {
   const [rowsToShow, setRowsToShow] = useState(50); // Number of rows to show initially
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasLoadedInitialData, setHasLoadedInitialData] = useState(false);
+  const [showScrollToTop, setShowScrollToTop] = useState(false);
 
   const { data = [], loading, error } = useFetchData(id);
 
@@ -73,17 +74,24 @@ export default function ResultsPage() {
 
     const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
 
+    setShowScrollToTop(scrollTop > 200);
+
     // Check if the user has scrolled near the bottom of the page
     if (scrollTop + clientHeight >= scrollHeight - 50) {
       setLoadingMore(true);
       loadMoreRows();
     }
-  }, [loadMoreRows, loadingMore, loading]);
+  }, [loadMoreRows, loadingMore, loading]); // Debounce with a 100ms delay
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [handleScroll]);
+
+  // scroll to top
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   useEffect(() => {
     if (!data || !data.results) return;
@@ -161,7 +169,8 @@ export default function ResultsPage() {
           <h3>Search Results</h3>
           {loading ? (
             <p className="animate-pulsate italic">
-              Loading your search results...
+              Loading your search results... Larger searches may take up to a
+              minute.
             </p>
           ) : (
             <p>
@@ -229,10 +238,7 @@ export default function ResultsPage() {
         </Table>
       ) : (
         // Show actual table after initial data is loaded
-        <div
-          className="flex flex-col justify-center items-center w-full"
-          // style={{ maxHeight: "500px", overflowY: "auto", overflowX: "auto" }}
-        >
+        <div className="flex flex-col justify-center items-center w-full">
           <Table
             aria-label="Table with search results"
             classNames={{
@@ -242,7 +248,6 @@ export default function ResultsPage() {
               td: "text-xs",
             }}
             isStriped
-            isHeaderSticky
             removeWrapper
             fullWidth
             layout="auto"
@@ -278,6 +283,14 @@ export default function ResultsPage() {
           ) : null}
         </div>
       )}
+
+      <button
+        onClick={scrollToTop}
+        className={`fixed bottom-8 right-8 bg-accent text-white w-16 h-16 rounded-full shadow-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 smooth ${showScrollToTop ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+        aria-label="Scroll to top"
+      >
+        ↑
+      </button>
     </section>
   );
 }

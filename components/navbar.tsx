@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -8,14 +8,26 @@ import { jetBrainsMono } from "@/config/fonts";
 
 export const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50); // Change background after scrolling 50px
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <nav
-      className={`${jetBrainsMono.variable} w-full flex justify-center items-center global-padding py-8`}
+      className={`${jetBrainsMono.variable} w-full flex justify-center items-center global-padding py-4 transition-all duration-300 ${
+        isScrolled ? "bg-white shadow-md" : "bg-transparent"
+      } sticky top-0 z-50`}
     >
       <div className="mx-auto flex justify-between global-width container">
         <div>
@@ -34,7 +46,7 @@ export const Navbar = () => {
             {siteConfig.navItems.map((item) => (
               <li
                 key={item.href}
-                className="text-base hover:text-secondary hover:-translate-y-1 font-jet font-semibold smooth"
+                className="text-base hover:text-secondary mt-[2px] hover:-translate-y-1 font-jet font-semibold smooth"
               >
                 <Link href={item.href}>{item.label}</Link>
               </li>
