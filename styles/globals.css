@@ -38,7 +38,7 @@ h4 {
 }
 
 .secondary-padding {
-  @apply px-0 md:px-12 lg:px-20 xl:px-32 2xl:px-48;
+  @apply px-0 md:px-12 lg:px-20 xl:px-32 2xl:px-40;
 }
 
 .font-jet {
