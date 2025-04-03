@@ -65,7 +65,7 @@ export default function ResultsPage() {
 
       // Set loadingMore to false after rows are loaded
       setLoadingMore(false);
-    }, 500); // Simulate network delay
+    }, 0); // Simulate network delay
   }, [data, rowsToShow]);
 
   const handleScroll = useCallback(() => {
@@ -215,7 +215,7 @@ export default function ResultsPage() {
             ))}
           </TableHeader>
 
-          <TableBody emptyContent={"No words found"}>
+          <TableBody>
             {Array.from({ length: 5 }).map((_, rowIndex) => (
               <TableRow key={`skeleton-${rowIndex}`} className="animate-pulse">
                 {Array.from({ length: 10 }).map((_, colIndex) => (
