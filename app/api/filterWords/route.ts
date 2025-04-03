@@ -62,6 +62,12 @@ export async function POST(request: Request) {
           value = row["Word"] ? row["Word"].length : 0;
 
           if (value < min || value > max) return false;
+        } else if (key === "CD_book_perc_raw") {
+          const adjustedMin = min / 100;
+          const adjustedMax = max / 100;
+          value = parseFloat(row[key] || 0);
+
+          if (value < adjustedMin || value > adjustedMax) return false;
         } else {
           const [min, max] = searchCriteria[key]; // Get the range for the filter
           value = parseFloat(row[key] || 0);

@@ -25,7 +25,7 @@ function loadCSVData(ageBand: string): Promise<Record<string, any>[]> {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { words, ageBand, page = 1, limit = 50 } = body;
+    const { words, ageBand } = body;
 
     if (!words || !Array.isArray(words)) {
       return NextResponse.json(
@@ -45,14 +45,7 @@ export async function POST(request: Request) {
       return match || { Word: word, notFound: true }; // Return "not found" if no match
     });
 
-    const startIndex = (page - 1) * limit;
-    const paginatedResults = results.slice(startIndex, startIndex + limit);
-
-    // return NextResponse.json(results);
-    return NextResponse.json({
-      results: paginatedResults || [], // Ensure results is always an array
-      total: results.length || 0,
-    });
+    return NextResponse.json(results);
   } catch (error) {
     console.error("Error searching words:", error);
     return NextResponse.json(
