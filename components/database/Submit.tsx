@@ -28,19 +28,67 @@ export const Submit: React.FC<SubmitProps> = ({
   const [isAlertVisible, setIsAlertVisible] = useState(false);
   const [btnColor, setBtnColor] = useState("bg-accent");
 
+  // const handleSubmit = async () => {
+  //   if (!approval) return;
+
+  //   if (searchMode === "words" && (!words || words.length === 0)) {
+  //     setErrorMessage("Please enter words in the text area before submitting.");
+  //     showAlert();
+  //     return; // Prevent submission
+  //   }
+
+  //   setApproval(approved ?? true); // Set approval state based on the prop
+  //   try {
+  //     const body = words?.length
+  //       ? { searchCriteria, words, age } // WordsInput mode
+  //       : { searchCriteria, age }; // StatsInput mode
+
+  //     // Send the data to the API
+  //     const response = await fetch("/api/saveSearch", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(body),
+  //     });
+
+  //     if (response.ok) {
+  //       const { id } = await response.json();
+  //       // Navigate to the results page with the unique ID
+  //       router.push(`/database/results?id=${id}`);
+  //     } else {
+  //       console.error("Failed to save search data");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error submitting data:", error);
+  //   }
+  // };
+
   const handleSubmit = async () => {
+    console.log("handleSubmit called");
+    console.log("words ", words);
     if (!approval) return;
 
-    if (searchMode === "words" && (!words || words.length === 0)) {
-      setErrorMessage("Please enter words in the text area before submitting.");
+    // Sanitize the words array before submission
+    const sanitizedWords = words
+      ?.join(" ") // Join all words into a single string
+      .split(/[\s,;]+/) // Split by spaces, commas, or semicolons
+      .map((word) => word.trim()) // Trim whitespace from each word
+      .filter((word) => word.length > 0); // Remove empty strings
+
+    if (
+      searchMode === "words" &&
+      (!sanitizedWords || sanitizedWords.length === 0)
+    ) {
+      setErrorMessage("Please enter valid words before submitting.");
       showAlert();
       return; // Prevent submission
     }
 
     setApproval(approved ?? true); // Set approval state based on the prop
     try {
-      const body = words?.length
-        ? { searchCriteria, words, age } // WordsInput mode
+      const body = sanitizedWords?.length
+        ? { searchCriteria, words: sanitizedWords, age } // WordsInput mode
         : { searchCriteria, age }; // StatsInput mode
 
       // Send the data to the API
