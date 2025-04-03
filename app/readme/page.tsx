@@ -26,11 +26,26 @@ export default function ReadmePage() {
           The number of times (both raw count and a standardised frequency
           metric, the Zipf frequency) it appears in British television
           programmes aimed at different age groups (0–6 years, 6–12 years, all
-          ages). These frequencies are extracted from the SUBTLEX database (van
-          Heuven et al., 2014); please refer to Korochkina et al. (2024) for
-          more information.{" "}
+          ages). These frequencies are extracted from{" "}
+          <a
+            className="text-accent hover:underline"
+            href="https://journals.sagepub.com/doi/10.1080/17470218.2013.850521"
+          >
+            the SUBTLEX database (van Heuven et al., 2014)
+          </a>
+          ; please refer to Korochkina et al. (2024) for more information.{" "}
         </li>
       </ul>
+      <p>
+        If some of the words you entered are missing from the Results table, it
+        means they are not attested in CYP-LEX (i.e., they do not appear in the
+        1,200 books we analysed). If a common word is missing, it may be due to
+        spelling differences (e.g., some words may only be attested in American
+        or British spelling). You might want to try an alternative spelling.
+        Please note that if a word is missing in CYP-LEX, this does not mean it
+        is also unattested in SUBTLEX-UK, so you may want to check this database
+        instead
+      </p>
       <PrimaryBtn href="/about" size="lg">
         Learn more
       </PrimaryBtn>
