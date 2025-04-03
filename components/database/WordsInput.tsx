@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { CheckboxGroup, Checkbox } from "@heroui/checkbox";
 import { AgeBand } from "./AgeBand";
 import { Textarea } from "@heroui/input";
@@ -36,6 +36,7 @@ export const WordsInput: React.FC<WordsInput> = ({ handleSelectMode }) => {
 
   // FRONT END MECHANICS ------------------------------------------------------------------------------------------------------------------------------------
 
+  // Check if it's mobile
   useEffect(() => {
     const handleResize = () => {
       setisMobile(window.innerWidth <= 1024);
@@ -45,6 +46,7 @@ export const WordsInput: React.FC<WordsInput> = ({ handleSelectMode }) => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // Close tooltip when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
@@ -59,21 +61,26 @@ export const WordsInput: React.FC<WordsInput> = ({ handleSelectMode }) => {
     };
   }, []);
 
+  // clear text area
   const handleTextareaClear = () => {
     setWords([]);
     setIsText(false);
   };
 
+  // clear configuration
   const handleClear = () => {
     handleSelectMode("");
     setIsText(false);
   };
 
+  // handle upload click
   const handleUploadClick = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
     }
   };
+
+  // styling
 
   const commonTooltipProps = (id: string, content: string) => ({
     content: content,
@@ -120,50 +127,48 @@ export const WordsInput: React.FC<WordsInput> = ({ handleSelectMode }) => {
                 label: "font-semibold text-text",
               }}
             >
-              {stats
-                // .filter((info) => !info.skipWords) // Filter out items with skipWords
-                .map((info) => (
-                  <div className="space-x-1 flex flex-row" key={info.id}>
-                    <Checkbox
-                      key={info.id}
-                      value={info.value}
-                      isSelected={
-                        !!searchCriteria[
-                          info.value as keyof typeof searchCriteria
-                        ]
-                      }
-                      onChange={(event) =>
-                        updateCriteria(
-                          info.value as keyof typeof searchCriteria,
-                          event.target.checked
-                        )
-                      }
+              {stats.map((info) => (
+                <div className="space-x-1 flex flex-row" key={info.id}>
+                  <Checkbox
+                    key={info.id}
+                    value={info.value}
+                    isSelected={
+                      !!searchCriteria[
+                        info.value as keyof typeof searchCriteria
+                      ]
+                    }
+                    onChange={(event) =>
+                      updateCriteria(
+                        info.value as keyof typeof searchCriteria,
+                        event.target.checked
+                      )
+                    }
+                  >
+                    <div className="flex items-center text-sm">
+                      <span>{info.name}</span>
+                    </div>
+                  </Checkbox>
+                  {info.tooltip && (
+                    <Tooltip
+                      {...commonTooltipProps(info.tooltip, info.tooltip)}
+                      key={info.tooltip}
                     >
-                      <div className="flex items-center text-sm">
-                        <span>{info.name}</span>
+                      <div className="flex items-center hover:opacity-100 transition-opacity opacity-50 z-50">
+                        <Button
+                          className="h-4 w-4 min-w-4 rounded-lg p-0 tooltip-button bg-text"
+                          onPress={() => handleTooltipToggle(info.tooltip)}
+                        >
+                          <InfoIcon
+                            size={10}
+                            className="fill-white"
+                            fill="white"
+                          />
+                        </Button>
                       </div>
-                    </Checkbox>
-                    {info.tooltip && (
-                      <Tooltip
-                        {...commonTooltipProps(info.tooltip, info.tooltip)}
-                        key={info.tooltip}
-                      >
-                        <div className="flex items-center hover:opacity-100 transition-opacity opacity-50 z-50">
-                          <Button
-                            className="h-4 w-4 min-w-4 rounded-lg p-0 tooltip-button bg-text"
-                            onPress={() => handleTooltipToggle(info.tooltip)}
-                          >
-                            <InfoIcon
-                              size={10}
-                              className="fill-white"
-                              fill="white"
-                            />
-                          </Button>
-                        </div>
-                      </Tooltip>
-                    )}
-                  </div>
-                ))}
+                    </Tooltip>
+                  )}
+                </div>
+              ))}
             </CheckboxGroup>
           </div>
           {/* text area */}
