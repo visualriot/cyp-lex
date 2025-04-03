@@ -38,7 +38,7 @@ h4 {
 }
 
 .secondary-padding {
-  @apply px-0 md:px-12 lg:px-20 xl:px-32 2xl:px-48;
+  @apply px-0 md:px-12 lg:px-20 xl:px-32 2xl:px-40;
 }
 
 .font-jet {
@@ -109,4 +109,26 @@ h4 {
 
 .hamburger.open .hamburger-line:nth-child(3) {
   transform: translateY(-10px) rotate(-45deg);
+}
+
+.sticky-scrollbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: hidden;
+}
+
+.scrollbar-thumb {
+  height: 100%;
+  background-color: #6b7280; /* Gray-500 */
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.scrollbar-thumb:hover {
+  background-color: #4b5563; /* Gray-600 */
 }

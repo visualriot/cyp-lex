@@ -59,9 +59,11 @@ export default function AboutPage() {
             Korochkina, M., Marelli, M., Brysbaert, M., & Rastle, K. (2024). The
             Children and Young People&apos;s Books Lexicon (CYP-LEX): A
             large-scale lexical database of books read by children and young
-            people in the United Kingdom. Quarterly Journal of Experimental
-            Psychology, 77(12), 2418–2438.
-            https://doi.org/10.1177/17470218241229694.
+            people in the United Kingdom.{" "}
+            <span className="italic">
+              Quarterly Journal of Experimental Psychology
+            </span>
+            , 77(12), 2418–2438. https://doi.org/10.1177/17470218241229694.
           </p>
         </Snippet>
       </div>
