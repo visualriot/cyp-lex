@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { useFetchData } from "@/app/hooks/useFetchData";
+
 import { SecondaryBtn } from "@/components/buttons";
 import { DoneIcon, DownloadIcon, CopyIcon } from "@/components/icons";
 import {
@@ -27,23 +28,6 @@ export default function ResultsPage() {
   const [hasLoadedInitialData, setHasLoadedInitialData] = useState(false);
 
   const { data = [], loading, error } = useFetchData(id);
-
-  // const allColumns = {
-  //   Word: "Word",
-  //   numberOfLetters: "No. of Letters",
-  //   Lemma: "Lemma",
-  //   mcPoS: "mcPoS",
-  //   Count: "Count",
-  //   Zipf_freq: "Zipf_freq",
-  //   CD_book_count_raw: "CD_book_count_raw",
-  //   CD_book_perc_raw: "CD_book_perc_raw",
-  //   CBeebies_raw: "CBeebies_raw",
-  //   CBeebies_log: "CBeebies_log",
-  //   CBBC_raw: "CBBC_raw",
-  //   CBBC_log: "CBBC_log",
-  //   SubtlexUK_raw: "SubtlexUK_raw",
-  //   SubtlexUK_log: "SubtlexUK_log",
-  // };
 
   const allColumns = {
     Word: "Word",
@@ -126,6 +110,8 @@ export default function ResultsPage() {
 
     setHeaders(generatedHeaders);
   }, [data]);
+
+  // Generate table data for download and copy -------------------------------------------------------------------------------------
 
   const generateTableData = (delimiter: string) => {
     const headerLabels = headers.map((header) => header.label);
@@ -211,7 +197,7 @@ export default function ResultsPage() {
         <Table
           aria-label="Table with search results"
           classNames={{
-            table: "shadow-none",
+            table: "shadow-none table-scroll",
             wrapper: "shadow-none px-0",
             th: "text-xs",
             td: "text-xs",
@@ -229,7 +215,7 @@ export default function ResultsPage() {
             ))}
           </TableHeader>
 
-          <TableBody>
+          <TableBody emptyContent={"No words found"}>
             {Array.from({ length: 5 }).map((_, rowIndex) => (
               <TableRow key={`skeleton-${rowIndex}`} className="animate-pulse">
                 {Array.from({ length: 10 }).map((_, colIndex) => (
@@ -243,17 +229,21 @@ export default function ResultsPage() {
         </Table>
       ) : (
         // Show actual table after initial data is loaded
-        <div className="flex flex-col justify-center items-center w-full">
+        <div
+          className="flex flex-col justify-center items-center w-full"
+          // style={{ maxHeight: "500px", overflowY: "auto", overflowX: "auto" }}
+        >
           <Table
             aria-label="Table with search results"
             classNames={{
               table: "shadow-none",
-              wrapper: "shadow-none px-0",
+              wrapper: "shadow-none px-0 ",
               th: "text-xs text-wrap whitespace-wrap  py-2",
               td: "text-xs",
             }}
             isStriped
             isHeaderSticky
+            removeWrapper
             fullWidth
             layout="auto"
           >
@@ -267,7 +257,10 @@ export default function ResultsPage() {
 
             <TableBody>
               {visibleRows.map((item: any, rowIndex) => (
-                <TableRow key={`${item.Word}-${rowIndex}`}>
+                <TableRow
+                  key={`${item.Word}-${rowIndex}`}
+                  className={rowIndex % 2 === 0 ? "bg-white" : "bg-gray-100"}
+                >
                   {headers.map((header) => (
                     <TableCell key={header.key}>
                       {item[header.key] || "N/A"}
@@ -277,6 +270,7 @@ export default function ResultsPage() {
               ))}
             </TableBody>
           </Table>
+
           {/* Show spinner only when loading more rows */}
           {loadingMore ||
           (hasLoadedInitialData && visibleRows.length < data.results.length) ? (
