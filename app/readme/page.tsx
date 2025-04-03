@@ -1,4 +1,5 @@
 import { PrimaryBtn } from "@/components/buttons";
+import { Link } from "@heroui/link";
 
 export default function ReadmePage() {
   return (
@@ -27,12 +28,13 @@ export default function ReadmePage() {
           metric, the Zipf frequency) it appears in British television
           programmes aimed at different age groups (0–6 years, 6–12 years, all
           ages). These frequencies are extracted from{" "}
-          <a
+          <Link
             className="text-accent hover:underline"
             href="https://journals.sagepub.com/doi/10.1080/17470218.2013.850521"
+            target="_blank"
           >
             the SUBTLEX database (van Heuven et al., 2014)
-          </a>
+          </Link>
           ; please refer to Korochkina et al. (2024) for more information.{" "}
         </li>
       </ul>

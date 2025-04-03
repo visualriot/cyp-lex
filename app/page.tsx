@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { PrimaryBtn } from "@/components/buttons";
+import { Link } from "@heroui/link";
 
 export default function Home() {
   return (
@@ -61,15 +62,16 @@ export default function Home() {
               Quarterly Journal of Experimental Psychology
             </span>
             , 77(12), 2418-2438.
-            <a
+            <Link
               href="https://doi.org/10.1177/17470218241229694"
+              target="_blank"
               className="hover:text-accent smooth"
             >
               {" "}
               <span className="text-accent hover:underline smooth">
                 https://doi.org/10.1177/17470218241229694
               </span>
-            </a>
+            </Link>
           </p>
         </div>
       </div>

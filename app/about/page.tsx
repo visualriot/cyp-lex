@@ -19,12 +19,21 @@ export default function AboutPage() {
         <Link
           className={linkStyle}
           href="https://doi.org/10.1177/17470218241229694"
+          target="_blank"
         >
           https://doi.org/10.1177/17470218241229694
         </Link>
         . This article also discusses the database in the context of reading and
         language development. A brief, accessible summary of these findings is
-        available <Link className={linkStyle}>here</Link>.
+        available{" "}
+        <Link
+          href="https://osf.io/squ49/"
+          target="_blank"
+          className={linkStyle}
+        >
+          here
+        </Link>
+        .
       </p>
       <p>
         The database is also publicly available as several .csv data sheets. If
@@ -34,6 +43,7 @@ export default function AboutPage() {
         <Link
           className={linkStyle}
           href="https://doi.org/10.17605/OSF.IO/SQU49"
+          target="_blank"
         >
           https://doi.org/10.17605/OSF.IO/SQU49
         </Link>
