@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import { useFetchData } from "@/app/hooks/useFetchData";
+import { debounce } from "lodash";
 
 import { SecondaryBtn } from "@/components/buttons";
 import { DoneIcon, DownloadIcon, CopyIcon } from "@/components/icons";
@@ -69,19 +70,23 @@ export default function ResultsPage() {
     }, 0); // Simulate network delay
   }, [data, rowsToShow]);
 
-  const handleScroll = useCallback(() => {
-    if (loading || loadingMore) return;
+  const handleScroll = useCallback(
+    debounce(() => {
+      if (loading || loadingMore) return;
 
-    const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+      const { scrollTop, scrollHeight, clientHeight } =
+        document.documentElement;
 
-    setShowScrollToTop(scrollTop > 200);
+      setShowScrollToTop(scrollTop > 200);
 
-    // Check if the user has scrolled near the bottom of the page
-    if (scrollTop + clientHeight >= scrollHeight - 50) {
-      setLoadingMore(true);
-      loadMoreRows();
-    }
-  }, [loadMoreRows, loadingMore, loading]);
+      // Check if the user has scrolled near the bottom of the page
+      if (scrollTop + clientHeight >= scrollHeight - 50) {
+        setLoadingMore(true);
+        loadMoreRows();
+      }
+    }, 100), // Debounce with a 100ms delay
+    [loadMoreRows, loadingMore, loading]
+  );
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
@@ -237,10 +242,7 @@ export default function ResultsPage() {
         </Table>
       ) : (
         // Show actual table after initial data is loaded
-        <div
-          className="flex flex-col justify-center items-center w-full"
-          // style={{ maxHeight: "500px", overflowY: "auto", overflowX: "auto" }}
-        >
+        <div className="flex flex-col justify-center items-center w-full">
           <Table
             aria-label="Table with search results"
             classNames={{
@@ -250,7 +252,6 @@ export default function ResultsPage() {
               td: "text-xs",
             }}
             isStriped
-            isHeaderSticky
             removeWrapper
             fullWidth
             layout="auto"
