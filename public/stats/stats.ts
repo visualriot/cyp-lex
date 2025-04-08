@@ -1,6 +1,6 @@
 export const stats = [
   {
-    id: 1,
+    id: "Lemma",
     name: "Lemma",
     value: "Lemma",
     tooltip: "Uninflected word form",
@@ -15,7 +15,7 @@ export const stats = [
     type: "checkbox-group",
   },
   {
-    id: 3,
+    id: "LetterCount",
     name: "Number of letters",
     value: "LetterCount",
     type: "slider",
@@ -33,7 +33,7 @@ export const stats = [
     skipWords: true,
   },
   {
-    id: 4,
+    id: "Count",
     name: "Raw frequency",
     value: "Count",
     tooltip:
@@ -51,7 +51,7 @@ export const stats = [
     ],
   },
   {
-    id: 5,
+    id: "Zipf_freq",
     name: "Zipf frequency",
     value: "Zipf_freq",
     tooltip: "Standardised frequency metric in the selected age range",
@@ -68,7 +68,7 @@ export const stats = [
     ],
   },
   {
-    id: 6,
+    id: "CD_book_perc_raw",
     name: "Book proportion",
     value: "CD_book_perc_raw",
     tooltip:
@@ -86,7 +86,7 @@ export const stats = [
     ],
   },
   {
-    id: 7,
+    id: "CBeebies_raw",
     name: "Raw frequency in CBeebies TV programmes (ages 0-6)",
     value: "CBeebies_raw",
     type: "slider",
@@ -102,7 +102,7 @@ export const stats = [
     ],
   },
   {
-    id: 8,
+    id: "CBeebies_log",
     name: "Zipf frequency in CBeebies TV programmes (ages 0-6)",
     value: "CBeebies_log",
     type: "slider",
@@ -118,7 +118,7 @@ export const stats = [
     ],
   },
   {
-    id: 9,
+    id: "CBBC_raw",
     name: "Raw frequency in CBBC TV programmes (ages 6-12)",
     value: "CBBC_raw",
     type: "slider",
@@ -135,7 +135,7 @@ export const stats = [
     ],
   },
   {
-    id: 10,
+    id: "CBBC_log",
     name: "Zipf frequency in CBBC TV programmes (ages 6-12)",
     value: "CBBC_log",
     type: "slider",
@@ -151,7 +151,7 @@ export const stats = [
     ],
   },
   {
-    id: 11,
+    id: "SubtlexUK_raw",
     name: "Raw frequency in TV programmes (all ages)",
     value: "SubtlexUK_raw",
     type: "slider",
@@ -168,7 +168,7 @@ export const stats = [
     ],
   },
   {
-    id: 12,
+    id: "SubtlexUK_log",
     name: "Zipf frequency in TV programmes (all ages)",
     value: "SubtlexUK_log",
     type: "slider",

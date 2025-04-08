@@ -67,8 +67,6 @@
 //     return () => window.removeEventListener("resize", handleResize);
 //   }, []);
 
-//   // SEARCH CRITERIA HANDLERS -----------------------------------------------------------------------------
-
 //   // CLEAR BUTTON HANDLER ---------------------------------------------------------------------------------
 //   const handleClear = () => {
 //     handleSelectMode("");
@@ -77,7 +75,6 @@
 //   };
 
 //   // TOOLTIP HANDLERS --------------------------------------------------------------------------------------
-//   // Toggle tooltip visibility
 //   const handleTooltipToggle = (id: string) => {
 //     if (isMobile) {
 //       setTooltipStates((prevStates) => ({
@@ -103,7 +100,7 @@
 //       mark: "mt-2",
 //     },
 //     className: "max-w-full",
-//     showSteps: !isMobile,
+//     showSteps: false,
 //   };
 
 //   const commonTooltipProps = (id: string, content: string) => ({
@@ -119,17 +116,97 @@
 //     <div className="space-y-8 w-full flex flex-col">
 //       <div className="space-y-8 w-full flex flex-col">
 //         <h3 className="">Select characteristics to filter words</h3>
-//         <div className="w-full flex  border-foreground-100 rounded  flex-col space-y-16 lg:border-1 lg:shadow-md  lg:p-6 lg:pt-8 lg:pb-16 lg:px-12">
+//         <div className="w-full flex border-foreground-100 rounded flex-col space-y-16 lg:border-1 lg:shadow-md lg:p-6 lg:pt-8 lg:pb-16 lg:px-12">
 //           <AgeBand ageBand={ageBand} setAgeBand={setAgeBand} />
 
 //           {/* Sliders & Checkboxes */}
 //           {stats.map((stat) => {
 //             if (stat.type === "slider") {
+//               const [range, setRange] = useState<number[]>([
+//                 stat.minValue ?? 0,
+//                 stat.maxValue ?? 100,
+//               ]);
+//               const [minInput, setMinInput] = useState<string>(
+//                 range[0].toString()
+//               );
+//               const [maxInput, setMaxInput] = useState<string>(
+//                 range[1].toString()
+//               );
+
+//               const handleSliderChange = (value: number | number[]) => {
+//                 if (Array.isArray(value)) {
+//                   // Handle range slider (array of numbers)
+//                   setRange(value);
+//                   setMinInput(value[0].toString());
+//                   setMaxInput(value[1].toString());
+//                   handleFilterChange(stat.value as keyof SearchCriteria, value);
+//                 } else {
+//                   // Handle single-value slider (number)
+//                   setRange([value, value]);
+//                   setMinInput(value.toString());
+//                   setMaxInput(value.toString());
+//                   handleFilterChange(stat.value as keyof SearchCriteria, [
+//                     value,
+//                     value,
+//                   ]);
+//                 }
+//               };
+
+//               const handleMinInputChange = (
+//                 e: React.ChangeEvent<HTMLInputElement>
+//               ) => {
+//                 setMinInput(e.target.value);
+//               };
+
+//               const handleMaxInputChange = (
+//                 e: React.ChangeEvent<HTMLInputElement>
+//               ) => {
+//                 setMaxInput(e.target.value);
+//               };
+
+//               const handleMinInputKeyDown = (
+//                 e: React.KeyboardEvent<HTMLInputElement>
+//               ) => {
+//                 if (e.key === "Enter" && !isNaN(Number(minInput))) {
+//                   const numericValue = Math.min(
+//                     Math.max(Number(minInput), stat.minValue ?? 0),
+//                     range[1]
+//                   );
+//                   setRange([numericValue, range[1]]);
+//                   setMinInput(numericValue.toString());
+//                   handleFilterChange(stat.value as keyof SearchCriteria, [
+//                     numericValue,
+//                     range[1],
+//                   ]);
+//                 }
+//               };
+
+//               const handleMaxInputKeyDown = (
+//                 e: React.KeyboardEvent<HTMLInputElement>
+//               ) => {
+//                 if (e.key === "Enter" && !isNaN(Number(maxInput))) {
+//                   const numericValue = Math.max(
+//                     Math.min(Number(maxInput), stat.maxValue ?? 100),
+//                     range[0]
+//                   );
+//                   setRange([range[0], numericValue]);
+//                   setMaxInput(numericValue.toString());
+//                   handleFilterChange(stat.value as keyof SearchCriteria, [
+//                     range[0],
+//                     numericValue,
+//                   ]);
+//                 }
+//               };
+
 //               return (
 //                 <div key={stat.id} className="space-y-4 relative">
 //                   <div className="absolute flex flex-row space-x-2 items-center top-4 left-0">
 //                     <h4>{stat.name}</h4>
 //                     {stat.tooltip && (
+//                       // <Tooltip
+//                       //   content={stat.tooltip}
+//                       //   className="bg-zinc-600 text-white rounded-md whitespace-normal max-w-72 text-xs text-center px-4 py-2"
+//                       // >
 //                       <Tooltip
 //                         {...commonTooltipProps(stat.value, stat.tooltip)}
 //                       >
@@ -151,21 +228,46 @@
 //                   <Slider
 //                     {...commonSliderProps}
 //                     label=" "
-//                     defaultValue={[
-//                       stat.minValue ?? 0, // Use default value if undefined
-//                       stat.maxValue ?? 100, // Adjust default as needed
-//                     ]}
+//                     defaultValue={range}
 //                     minValue={stat.minValue ?? 0}
 //                     maxValue={stat.maxValue ?? 100}
 //                     step={stat.step}
-//                     showSteps={false}
-//                     onChange={(value) =>
-//                       handleFilterChange(
-//                         stat.value as keyof SearchCriteria,
-//                         value
-//                       )
-//                     }
+//                     value={range}
+//                     onChange={handleSliderChange}
 //                     marks={stat.marks}
+//                     renderValue={({ children, ...props }) => (
+//                       <div className="flex items-center space-x-4">
+//                         <Tooltip
+//                           className="text-tiny text-default-500 rounded-md"
+//                           content="Press Enter to confirm"
+//                           placement="left"
+//                         >
+//                           <input
+//                             aria-label={`${stat.name} minimum value`}
+//                             className="px-1 py-0.5 w-20 text-right text-small text-default-700 font-medium bg-default-100 outline-none transition-colors rounded-small border-medium border-transparent hover:border-primary focus:border-primary"
+//                             type="text"
+//                             value={minInput}
+//                             onChange={handleMinInputChange}
+//                             onKeyDown={handleMinInputKeyDown}
+//                           />
+//                         </Tooltip>
+//                         <span>-</span>
+//                         <Tooltip
+//                           className="text-tiny text-default-500 rounded-md"
+//                           content="Press Enter to confirm"
+//                           placement="left"
+//                         >
+//                           <input
+//                             aria-label={`${stat.name} maximum value`}
+//                             className="px-1 py-0.5 w-20 text-right text-small text-default-700 font-medium bg-default-100 outline-none transition-colors rounded-small border-medium border-transparent hover:border-primary focus:border-primary"
+//                             type="text"
+//                             value={maxInput}
+//                             onChange={handleMaxInputChange}
+//                             onKeyDown={handleMaxInputKeyDown}
+//                           />
+//                         </Tooltip>
+//                       </div>
+//                     )}
 //                   />
 //                 </div>
 //               );
@@ -226,9 +328,8 @@
 //           })}
 //         </div>
 
-//         {/* SUBMIT BUTTONS */}
+//         {/* Submit Buttons */}
 //         <Submit
-//           // searchCriteria={filters}
 //           searchCriteria={filters}
 //           handleClear={handleClear}
 //           age={ageBand}
@@ -263,6 +364,113 @@ export const StatsInput: React.FC<StatsInput> = ({ handleSelectMode }) => {
   }>({});
   const [filters, setFilters] = useState<Partial<SearchCriteria>>({});
   const [ageBand, setAgeBand] = useState<string>("all");
+
+  // Create a state object for all sliders
+  const [sliderStates, setSliderStates] = useState(() =>
+    stats.reduce(
+      (acc, stat) => {
+        if (stat.type === "slider") {
+          acc[stat.id] = {
+            range: [stat.minValue ?? 0, stat.maxValue ?? 100],
+            minInput: (stat.minValue ?? 0).toString(),
+            maxInput: (stat.maxValue ?? 100).toString(),
+          };
+        }
+        return acc;
+      },
+      {} as Record<
+        string,
+        { range: number[]; minInput: string; maxInput: string }
+      >
+    )
+  );
+
+  const handleSliderChange = (statId: string, value: number[]) => {
+    setSliderStates((prev) => ({
+      ...prev,
+      [statId]: {
+        ...prev[statId],
+        range: value,
+        minInput: value[0].toString(),
+        maxInput: value[1].toString(),
+      },
+    }));
+    handleFilterChange(statId as keyof SearchCriteria, value);
+  };
+
+  const handleMinInputChange = (statId: string, value: string) => {
+    setSliderStates((prev) => ({
+      ...prev,
+      [statId]: {
+        ...prev[statId],
+        minInput: value,
+      },
+    }));
+  };
+
+  const handleMaxInputChange = (statId: string, value: string) => {
+    setSliderStates((prev) => ({
+      ...prev,
+      [statId]: {
+        ...prev[statId],
+        maxInput: value,
+      },
+    }));
+  };
+
+  const handleMinInputKeyDown = (
+    statId: string,
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    if (e.key === "Enter" && !isNaN(Number(sliderStates[statId].minInput))) {
+      const numericValue = Math.min(
+        Math.max(
+          Number(sliderStates[statId].minInput),
+          Number(stats.find((s) => s.id === statId)?.minValue ?? 0) // Ensure minValue is a number
+        ),
+        Number(sliderStates[statId].range[1]) // Ensure range[1] is a number
+      );
+      setSliderStates((prev) => ({
+        ...prev,
+        [statId]: {
+          ...prev[statId],
+          range: [numericValue, prev[statId].range[1]],
+          minInput: numericValue.toString(),
+        },
+      }));
+      handleFilterChange(statId as keyof SearchCriteria, [
+        numericValue,
+        sliderStates[statId].range[1],
+      ]);
+    }
+  };
+
+  const handleMaxInputKeyDown = (
+    statId: string,
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    if (e.key === "Enter" && !isNaN(Number(sliderStates[statId].maxInput))) {
+      const numericValue = Math.max(
+        Math.min(
+          Number(sliderStates[statId].maxInput),
+          stats.find((s) => s.id === statId)?.maxValue ?? 100
+        ),
+        sliderStates[statId].range[0]
+      );
+      setSliderStates((prev) => ({
+        ...prev,
+        [statId]: {
+          ...prev[statId],
+          range: [prev[statId].range[0], numericValue],
+          maxInput: numericValue.toString(),
+        },
+      }));
+      handleFilterChange(statId as keyof SearchCriteria, [
+        sliderStates[statId].range[0],
+        numericValue,
+      ]);
+    }
+  };
 
   const handleFilterChange = (field: keyof SearchCriteria, value: any) => {
     setFilters((prev) => {
@@ -364,91 +572,13 @@ export const StatsInput: React.FC<StatsInput> = ({ handleSelectMode }) => {
           {/* Sliders & Checkboxes */}
           {stats.map((stat) => {
             if (stat.type === "slider") {
-              const [range, setRange] = useState<number[]>([
-                stat.minValue ?? 0,
-                stat.maxValue ?? 100,
-              ]);
-              const [minInput, setMinInput] = useState<string>(
-                range[0].toString()
-              );
-              const [maxInput, setMaxInput] = useState<string>(
-                range[1].toString()
-              );
-
-              const handleSliderChange = (value: number | number[]) => {
-                if (Array.isArray(value)) {
-                  // Handle range slider (array of numbers)
-                  setRange(value);
-                  setMinInput(value[0].toString());
-                  setMaxInput(value[1].toString());
-                  handleFilterChange(stat.value as keyof SearchCriteria, value);
-                } else {
-                  // Handle single-value slider (number)
-                  setRange([value, value]);
-                  setMinInput(value.toString());
-                  setMaxInput(value.toString());
-                  handleFilterChange(stat.value as keyof SearchCriteria, [
-                    value,
-                    value,
-                  ]);
-                }
-              };
-
-              const handleMinInputChange = (
-                e: React.ChangeEvent<HTMLInputElement>
-              ) => {
-                setMinInput(e.target.value);
-              };
-
-              const handleMaxInputChange = (
-                e: React.ChangeEvent<HTMLInputElement>
-              ) => {
-                setMaxInput(e.target.value);
-              };
-
-              const handleMinInputKeyDown = (
-                e: React.KeyboardEvent<HTMLInputElement>
-              ) => {
-                if (e.key === "Enter" && !isNaN(Number(minInput))) {
-                  const numericValue = Math.min(
-                    Math.max(Number(minInput), stat.minValue ?? 0),
-                    range[1]
-                  );
-                  setRange([numericValue, range[1]]);
-                  setMinInput(numericValue.toString());
-                  handleFilterChange(stat.value as keyof SearchCriteria, [
-                    numericValue,
-                    range[1],
-                  ]);
-                }
-              };
-
-              const handleMaxInputKeyDown = (
-                e: React.KeyboardEvent<HTMLInputElement>
-              ) => {
-                if (e.key === "Enter" && !isNaN(Number(maxInput))) {
-                  const numericValue = Math.max(
-                    Math.min(Number(maxInput), stat.maxValue ?? 100),
-                    range[0]
-                  );
-                  setRange([range[0], numericValue]);
-                  setMaxInput(numericValue.toString());
-                  handleFilterChange(stat.value as keyof SearchCriteria, [
-                    range[0],
-                    numericValue,
-                  ]);
-                }
-              };
+              const sliderState = sliderStates[stat.id];
 
               return (
                 <div key={stat.id} className="space-y-4 relative">
                   <div className="absolute flex flex-row space-x-2 items-center top-4 left-0">
                     <h4>{stat.name}</h4>
                     {stat.tooltip && (
-                      // <Tooltip
-                      //   content={stat.tooltip}
-                      //   className="bg-zinc-600 text-white rounded-md whitespace-normal max-w-72 text-xs text-center px-4 py-2"
-                      // >
                       <Tooltip
                         {...commonTooltipProps(stat.value, stat.tooltip)}
                       >
@@ -470,12 +600,14 @@ export const StatsInput: React.FC<StatsInput> = ({ handleSelectMode }) => {
                   <Slider
                     {...commonSliderProps}
                     label=" "
-                    defaultValue={range}
+                    defaultValue={sliderState.range}
                     minValue={stat.minValue ?? 0}
                     maxValue={stat.maxValue ?? 100}
                     step={stat.step}
-                    value={range}
-                    onChange={handleSliderChange}
+                    value={sliderState.range}
+                    onChange={(value) =>
+                      handleSliderChange(stat.value, value as number[])
+                    }
                     marks={stat.marks}
                     renderValue={({ children, ...props }) => (
                       <div className="flex items-center space-x-4">
@@ -488,9 +620,13 @@ export const StatsInput: React.FC<StatsInput> = ({ handleSelectMode }) => {
                             aria-label={`${stat.name} minimum value`}
                             className="px-1 py-0.5 w-20 text-right text-small text-default-700 font-medium bg-default-100 outline-none transition-colors rounded-small border-medium border-transparent hover:border-primary focus:border-primary"
                             type="text"
-                            value={minInput}
-                            onChange={handleMinInputChange}
-                            onKeyDown={handleMinInputKeyDown}
+                            value={sliderState.minInput}
+                            onChange={(e) =>
+                              handleMinInputChange(stat.value, e.target.value)
+                            }
+                            onKeyDown={(e) =>
+                              handleMinInputKeyDown(stat.value, e)
+                            }
                           />
                         </Tooltip>
                         <span>-</span>
@@ -503,9 +639,13 @@ export const StatsInput: React.FC<StatsInput> = ({ handleSelectMode }) => {
                             aria-label={`${stat.name} maximum value`}
                             className="px-1 py-0.5 w-20 text-right text-small text-default-700 font-medium bg-default-100 outline-none transition-colors rounded-small border-medium border-transparent hover:border-primary focus:border-primary"
                             type="text"
-                            value={maxInput}
-                            onChange={handleMaxInputChange}
-                            onKeyDown={handleMaxInputKeyDown}
+                            value={sliderState.maxInput}
+                            onChange={(e) =>
+                              handleMaxInputChange(stat.value, e.target.value)
+                            }
+                            onKeyDown={(e) =>
+                              handleMaxInputKeyDown(stat.value, e)
+                            }
                           />
                         </Tooltip>
                       </div>
