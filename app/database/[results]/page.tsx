@@ -125,7 +125,8 @@ export default function ResultsPage() {
     const headerLabels = headers.map((header) => header.label);
     const rows = (data.results || []).map((item: any) =>
       headers
-        .map((header) => item[header.key as keyof typeof allColumns] || "N/A")
+        // .map((header) => item[header.key as keyof typeof allColumns] || "N/A")
+        .map((header) => item[header.key as keyof typeof allColumns] ?? "N/A")
         .join(delimiter)
     );
     return [headerLabels.join(delimiter), ...rows].join("\n");
@@ -268,7 +269,8 @@ export default function ResultsPage() {
                 >
                   {headers.map((header) => (
                     <TableCell key={header.key}>
-                      {item[header.key] || "N/A"}
+                      {/* {item[header.key] || "N/A"} */}
+                      {item[header.key] ?? "N/A"}
                     </TableCell>
                   ))}
                 </TableRow>
