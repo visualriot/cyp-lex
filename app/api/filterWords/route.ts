@@ -57,7 +57,7 @@ export async function POST(request: Request) {
           ) {
             return false;
           }
-        } else if (key === "numberOfLetters") {
+        } else if (key === "LetterCount") {
           const [min, max] = searchCriteria[key]; // Get the range for the filter
           value = row["Word"] ? row["Word"].length : 0;
 

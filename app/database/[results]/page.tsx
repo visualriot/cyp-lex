@@ -32,7 +32,7 @@ export default function ResultsPage() {
 
   const allColumns = {
     Word: "Word",
-    numberOfLetters: "N Letters",
+    LetterCount: "N Letters",
     Lemma: "Lemma",
     mcPoS: "Most common part of speech",
     Count: "Raw frequency",

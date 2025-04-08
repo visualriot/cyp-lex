@@ -17,13 +17,13 @@ export const stats = [
   {
     id: 3,
     name: "Number of letters",
-    value: "numberOfLetters",
+    value: "LetterCount",
     type: "slider",
-    minValue: 0,
+    minValue: 1,
     maxValue: 58,
     step: 1,
     marks: [
-      { value: 0, label: "0" },
+      { value: 1, label: "1" },
       { value: 12, label: "12" },
       { value: 24, label: "24" },
       { value: 36, label: "36" },
