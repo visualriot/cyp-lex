@@ -12,7 +12,18 @@ export default function ReadmePage() {
       <p>For each word, CYP-LEX provides:</p>
       <ul className="red-disc space-y-2">
         <li>Its lemma (uninflected form)</li>
-        <li>Its most common part of speech</li>
+        <li>
+          Its most common part of speech. The tags follow the Penn Treebank tag
+          set. Detailed information on all tags can be accessed{" "}
+          <a
+            href="/docs/J93-2004.pdf#page=5"
+            target="_blank"
+            className="text-accent hover:underline"
+          >
+            here
+          </a>{" "}
+          (see page 5 for what each abbreviation stands for).
+        </li>
         <li>
           The number of times it appears in books for a given age group (both
           raw count and a standardised frequency metric, the Zipf frequency)
