@@ -13,5 +13,5 @@ export interface SearchCriteria {
   CBBC_log?: boolean | number | [number, number];
   SubtlexUK_raw?: boolean | number | [number, number];
   SuntlexUK_log?: boolean | number | [number, number];
-  numberOfLetters?: number | [number, number];
+  LetterCount?: number | [number, number];
 }

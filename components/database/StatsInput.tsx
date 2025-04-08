@@ -1,3 +1,346 @@
+// import React, { useEffect, useState } from "react";
+// import { SearchCriteria } from "@/app/types/data";
+
+// import { CheckboxGroup, Checkbox } from "@heroui/checkbox";
+// import { Slider } from "@heroui/slider";
+// import { Tooltip } from "@heroui/tooltip";
+// import { Button } from "@heroui/button";
+// import { AgeBand } from "./AgeBand";
+// import { Submit } from "./Submit";
+// import { InfoIcon } from "../icons";
+// import { stats, mcpos } from "@/public/stats/stats";
+
+// interface StatsInput {
+//   handleSelectMode: (mode: string) => void;
+// }
+
+// export const StatsInput: React.FC<StatsInput> = ({ handleSelectMode }) => {
+//   const [isMobile, setisMobile] = React.useState(true);
+//   const [tooltipStates, setTooltipStates] = React.useState<{
+//     [key: string]: boolean;
+//   }>({});
+//   const [filters, setFilters] = useState<Partial<SearchCriteria>>({});
+//   const [ageBand, setAgeBand] = useState<string>("all");
+
+//   const handleFilterChange = (field: keyof SearchCriteria, value: any) => {
+//     setFilters((prev) => {
+//       const updatedFilters = { ...prev };
+
+//       if (!value || (Array.isArray(value) && value.length === 0)) {
+//         // Remove the filter if no value is provided
+//         delete updatedFilters[field];
+//       } else {
+//         updatedFilters[field] = value;
+//       }
+
+//       return updatedFilters;
+//     });
+//   };
+
+//   const handleCheckboxChange = (value: string, checked: boolean) => {
+//     setFilters((prev) => {
+//       const updatedFilters = { ...prev };
+//       const currentValues = Array.isArray(updatedFilters.mcPoS)
+//         ? updatedFilters.mcPoS
+//         : []; // Ensure mcPoS is treated as an array
+
+//       if (checked) {
+//         // Add the selected value
+//         updatedFilters.mcPoS = [...currentValues, value];
+//       } else {
+//         // Remove the unselected value
+//         updatedFilters.mcPoS = currentValues.filter(
+//           (item: string) => item !== value
+//         );
+//       }
+
+//       return updatedFilters;
+//     });
+//   };
+
+//   useEffect(() => {
+//     const handleResize = () => {
+//       setisMobile(window.innerWidth <= 1024);
+//     };
+//     handleResize();
+//     window.addEventListener("resize", handleResize);
+//     return () => window.removeEventListener("resize", handleResize);
+//   }, []);
+
+//   // CLEAR BUTTON HANDLER ---------------------------------------------------------------------------------
+//   const handleClear = () => {
+//     handleSelectMode("");
+//     setFilters({});
+//     setAgeBand("all");
+//   };
+
+//   // TOOLTIP HANDLERS --------------------------------------------------------------------------------------
+//   const handleTooltipToggle = (id: string) => {
+//     if (isMobile) {
+//       setTooltipStates((prevStates) => ({
+//         ...prevStates,
+//         [id]: !prevStates[id],
+//       }));
+//     }
+//   };
+
+//   const commonSliderProps = {
+//     classNames: {
+//       filler: "bg-gradient-to-r from-accentLight to-accentLight rounded-lg",
+//       labelWrapper: "mb-2",
+//       label: "font-semibold text-text text-base",
+//       value: "font-medium text-default-500 text-small",
+//       thumb: [
+//         "transition-size",
+//         "bg-gradient-to-r from-accentLight to-accentLight",
+//         "data-[dragging=true]:shadow-lg data-[dragging=true]:shadow-black/20",
+//         "data-[dragging=true]:w-7 data-[dragging=true]:h-7 data-[dragging=true]:after:h-6 data-[dragging=true]:after:w-6",
+//       ],
+//       step: "data-[in-range=true]:bg-black/30 dark:data-[in-range=true]:bg-white/50",
+//       mark: "mt-2",
+//     },
+//     className: "max-w-full",
+//     showSteps: false,
+//   };
+
+//   const commonTooltipProps = (id: string, content: string) => ({
+//     content: content,
+//     className:
+//       "bg-zinc-600 text-white rounded-md whitespace-normal max-w-72 text-xs text-center px-4 py-2",
+//     isOpen: isMobile ? tooltipStates[id] : undefined,
+//     onClose: () =>
+//       setTooltipStates((prevStates) => ({ ...prevStates, [id]: false })),
+//   });
+
+//   return (
+//     <div className="space-y-8 w-full flex flex-col">
+//       <div className="space-y-8 w-full flex flex-col">
+//         <h3 className="">Select characteristics to filter words</h3>
+//         <div className="w-full flex border-foreground-100 rounded flex-col space-y-16 lg:border-1 lg:shadow-md lg:p-6 lg:pt-8 lg:pb-16 lg:px-12">
+//           <AgeBand ageBand={ageBand} setAgeBand={setAgeBand} />
+
+//           {/* Sliders & Checkboxes */}
+//           {stats.map((stat) => {
+//             if (stat.type === "slider") {
+//               const [range, setRange] = useState<number[]>([
+//                 stat.minValue ?? 0,
+//                 stat.maxValue ?? 100,
+//               ]);
+//               const [minInput, setMinInput] = useState<string>(
+//                 range[0].toString()
+//               );
+//               const [maxInput, setMaxInput] = useState<string>(
+//                 range[1].toString()
+//               );
+
+//               const handleSliderChange = (value: number | number[]) => {
+//                 if (Array.isArray(value)) {
+//                   // Handle range slider (array of numbers)
+//                   setRange(value);
+//                   setMinInput(value[0].toString());
+//                   setMaxInput(value[1].toString());
+//                   handleFilterChange(stat.value as keyof SearchCriteria, value);
+//                 } else {
+//                   // Handle single-value slider (number)
+//                   setRange([value, value]);
+//                   setMinInput(value.toString());
+//                   setMaxInput(value.toString());
+//                   handleFilterChange(stat.value as keyof SearchCriteria, [
+//                     value,
+//                     value,
+//                   ]);
+//                 }
+//               };
+
+//               const handleMinInputChange = (
+//                 e: React.ChangeEvent<HTMLInputElement>
+//               ) => {
+//                 setMinInput(e.target.value);
+//               };
+
+//               const handleMaxInputChange = (
+//                 e: React.ChangeEvent<HTMLInputElement>
+//               ) => {
+//                 setMaxInput(e.target.value);
+//               };
+
+//               const handleMinInputKeyDown = (
+//                 e: React.KeyboardEvent<HTMLInputElement>
+//               ) => {
+//                 if (e.key === "Enter" && !isNaN(Number(minInput))) {
+//                   const numericValue = Math.min(
+//                     Math.max(Number(minInput), stat.minValue ?? 0),
+//                     range[1]
+//                   );
+//                   setRange([numericValue, range[1]]);
+//                   setMinInput(numericValue.toString());
+//                   handleFilterChange(stat.value as keyof SearchCriteria, [
+//                     numericValue,
+//                     range[1],
+//                   ]);
+//                 }
+//               };
+
+//               const handleMaxInputKeyDown = (
+//                 e: React.KeyboardEvent<HTMLInputElement>
+//               ) => {
+//                 if (e.key === "Enter" && !isNaN(Number(maxInput))) {
+//                   const numericValue = Math.max(
+//                     Math.min(Number(maxInput), stat.maxValue ?? 100),
+//                     range[0]
+//                   );
+//                   setRange([range[0], numericValue]);
+//                   setMaxInput(numericValue.toString());
+//                   handleFilterChange(stat.value as keyof SearchCriteria, [
+//                     range[0],
+//                     numericValue,
+//                   ]);
+//                 }
+//               };
+
+//               return (
+//                 <div key={stat.id} className="space-y-4 relative">
+//                   <div className="absolute flex flex-row space-x-2 items-center top-4 left-0">
+//                     <h4>{stat.name}</h4>
+//                     {stat.tooltip && (
+//                       // <Tooltip
+//                       //   content={stat.tooltip}
+//                       //   className="bg-zinc-600 text-white rounded-md whitespace-normal max-w-72 text-xs text-center px-4 py-2"
+//                       // >
+//                       <Tooltip
+//                         {...commonTooltipProps(stat.value, stat.tooltip)}
+//                       >
+//                         <div className="flex items-center hover:opacity-100 transition-opacity opacity-50 z-50">
+//                           <Button
+//                             className="h-4 w-4 min-w-4 rounded-xl p-0 tooltip-button bg-text"
+//                             onPress={() => handleTooltipToggle(stat.value)}
+//                           >
+//                             <InfoIcon
+//                               size={10}
+//                               className="fill-white"
+//                               fill="white"
+//                             />
+//                           </Button>
+//                         </div>
+//                       </Tooltip>
+//                     )}
+//                   </div>
+//                   <Slider
+//                     {...commonSliderProps}
+//                     label=" "
+//                     defaultValue={range}
+//                     minValue={stat.minValue ?? 0}
+//                     maxValue={stat.maxValue ?? 100}
+//                     step={stat.step}
+//                     value={range}
+//                     onChange={handleSliderChange}
+//                     marks={stat.marks}
+//                     renderValue={({ children, ...props }) => (
+//                       <div className="flex items-center space-x-4">
+//                         <Tooltip
+//                           className="text-tiny text-default-500 rounded-md"
+//                           content="Press Enter to confirm"
+//                           placement="left"
+//                         >
+//                           <input
+//                             aria-label={`${stat.name} minimum value`}
+//                             className="px-1 py-0.5 w-20 text-right text-small text-default-700 font-medium bg-default-100 outline-none transition-colors rounded-small border-medium border-transparent hover:border-primary focus:border-primary"
+//                             type="text"
+//                             value={minInput}
+//                             onChange={handleMinInputChange}
+//                             onKeyDown={handleMinInputKeyDown}
+//                           />
+//                         </Tooltip>
+//                         <span>-</span>
+//                         <Tooltip
+//                           className="text-tiny text-default-500 rounded-md"
+//                           content="Press Enter to confirm"
+//                           placement="left"
+//                         >
+//                           <input
+//                             aria-label={`${stat.name} maximum value`}
+//                             className="px-1 py-0.5 w-20 text-right text-small text-default-700 font-medium bg-default-100 outline-none transition-colors rounded-small border-medium border-transparent hover:border-primary focus:border-primary"
+//                             type="text"
+//                             value={maxInput}
+//                             onChange={handleMaxInputChange}
+//                             onKeyDown={handleMaxInputKeyDown}
+//                           />
+//                         </Tooltip>
+//                       </div>
+//                     )}
+//                   />
+//                 </div>
+//               );
+//             } else if (stat.type === "checkbox-group") {
+//               return (
+//                 <div key={stat.id} className="space-y-4 relative">
+//                   <div className="absolute flex flex-row space-x-2 items-center top-4 left-0">
+//                     <h4>{stat.name}</h4>
+//                     {stat.tooltip && (
+//                       <Tooltip
+//                         {...commonTooltipProps(stat.value, stat.tooltip)}
+//                       >
+//                         <div className="flex items-center hover:opacity-100 transition-opacity opacity-50 z-50">
+//                           <Button
+//                             className="h-4 w-4 min-w-4 rounded-xl p-0 tooltip-button bg-text"
+//                             onPress={() => handleTooltipToggle(stat.value)}
+//                           >
+//                             <InfoIcon
+//                               size={10}
+//                               className="fill-white"
+//                               fill="white"
+//                             />
+//                           </Button>
+//                         </div>
+//                       </Tooltip>
+//                     )}
+//                   </div>
+//                   <CheckboxGroup
+//                     key={stat.id}
+//                     label={stat.name}
+//                     orientation="horizontal"
+//                     classNames={{
+//                       wrapper:
+//                         "flex flex-row mt-2 lg:mt-0 lg:space-x-16 lg:space-y-2 -mb-4",
+//                       label: "font-semibold text-text",
+//                     }}
+//                   >
+//                     {mcpos.map((item) => (
+//                       <Checkbox
+//                         key={item.id}
+//                         value={item.value}
+//                         onChange={(event) =>
+//                           handleCheckboxChange(item.value, event.target.checked)
+//                         }
+//                         classNames={{
+//                           wrapper: "fill-accent",
+//                           label: "text-sm font-medium",
+//                         }}
+//                       >
+//                         {item.name}
+//                       </Checkbox>
+//                     ))}
+//                   </CheckboxGroup>
+//                 </div>
+//               );
+//             }
+//             return null;
+//           })}
+//         </div>
+
+//         {/* Submit Buttons */}
+//         <Submit
+//           searchCriteria={filters}
+//           handleClear={handleClear}
+//           age={ageBand}
+//           approved={true}
+//           searchMode="stats"
+//         />
+//       </div>
+//     </div>
+//   );
+// };
+
 import React, { useEffect, useState } from "react";
 import { SearchCriteria } from "@/app/types/data";
 
@@ -21,6 +364,113 @@ export const StatsInput: React.FC<StatsInput> = ({ handleSelectMode }) => {
   }>({});
   const [filters, setFilters] = useState<Partial<SearchCriteria>>({});
   const [ageBand, setAgeBand] = useState<string>("all");
+
+  // Create a state object for all sliders
+  const [sliderStates, setSliderStates] = useState(() =>
+    stats.reduce(
+      (acc, stat) => {
+        if (stat.type === "slider") {
+          acc[stat.id] = {
+            range: [stat.minValue ?? 0, stat.maxValue ?? 100],
+            minInput: (stat.minValue ?? 0).toString(),
+            maxInput: (stat.maxValue ?? 100).toString(),
+          };
+        }
+        return acc;
+      },
+      {} as Record<
+        string,
+        { range: number[]; minInput: string; maxInput: string }
+      >
+    )
+  );
+
+  const handleSliderChange = (statId: string, value: number[]) => {
+    setSliderStates((prev) => ({
+      ...prev,
+      [statId]: {
+        ...prev[statId],
+        range: value,
+        minInput: value[0].toString(),
+        maxInput: value[1].toString(),
+      },
+    }));
+    handleFilterChange(statId as keyof SearchCriteria, value);
+  };
+
+  const handleMinInputChange = (statId: string, value: string) => {
+    setSliderStates((prev) => ({
+      ...prev,
+      [statId]: {
+        ...prev[statId],
+        minInput: value,
+      },
+    }));
+  };
+
+  const handleMaxInputChange = (statId: string, value: string) => {
+    setSliderStates((prev) => ({
+      ...prev,
+      [statId]: {
+        ...prev[statId],
+        maxInput: value,
+      },
+    }));
+  };
+
+  const handleMinInputKeyDown = (
+    statId: string,
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    if (e.key === "Enter" && !isNaN(Number(sliderStates[statId].minInput))) {
+      const numericValue = Math.min(
+        Math.max(
+          Number(sliderStates[statId].minInput),
+          Number(stats.find((s) => s.id === statId)?.minValue ?? 0) // Ensure minValue is a number
+        ),
+        Number(sliderStates[statId].range[1]) // Ensure range[1] is a number
+      );
+      setSliderStates((prev) => ({
+        ...prev,
+        [statId]: {
+          ...prev[statId],
+          range: [numericValue, prev[statId].range[1]],
+          minInput: numericValue.toString(),
+        },
+      }));
+      handleFilterChange(statId as keyof SearchCriteria, [
+        numericValue,
+        sliderStates[statId].range[1],
+      ]);
+    }
+  };
+
+  const handleMaxInputKeyDown = (
+    statId: string,
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    if (e.key === "Enter" && !isNaN(Number(sliderStates[statId].maxInput))) {
+      const numericValue = Math.max(
+        Math.min(
+          Number(sliderStates[statId].maxInput),
+          stats.find((s) => s.id === statId)?.maxValue ?? 100
+        ),
+        sliderStates[statId].range[0]
+      );
+      setSliderStates((prev) => ({
+        ...prev,
+        [statId]: {
+          ...prev[statId],
+          range: [prev[statId].range[0], numericValue],
+          maxInput: numericValue.toString(),
+        },
+      }));
+      handleFilterChange(statId as keyof SearchCriteria, [
+        sliderStates[statId].range[0],
+        numericValue,
+      ]);
+    }
+  };
 
   const handleFilterChange = (field: keyof SearchCriteria, value: any) => {
     setFilters((prev) => {
@@ -67,8 +517,6 @@ export const StatsInput: React.FC<StatsInput> = ({ handleSelectMode }) => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // SEARCH CRITERIA HANDLERS -----------------------------------------------------------------------------
-
   // CLEAR BUTTON HANDLER ---------------------------------------------------------------------------------
   const handleClear = () => {
     handleSelectMode("");
@@ -77,7 +525,6 @@ export const StatsInput: React.FC<StatsInput> = ({ handleSelectMode }) => {
   };
 
   // TOOLTIP HANDLERS --------------------------------------------------------------------------------------
-  // Toggle tooltip visibility
   const handleTooltipToggle = (id: string) => {
     if (isMobile) {
       setTooltipStates((prevStates) => ({
@@ -103,7 +550,7 @@ export const StatsInput: React.FC<StatsInput> = ({ handleSelectMode }) => {
       mark: "mt-2",
     },
     className: "max-w-full",
-    showSteps: !isMobile,
+    showSteps: false,
   };
 
   const commonTooltipProps = (id: string, content: string) => ({
@@ -115,91 +562,18 @@ export const StatsInput: React.FC<StatsInput> = ({ handleSelectMode }) => {
       setTooltipStates((prevStates) => ({ ...prevStates, [id]: false })),
   });
 
-  // const generateMarks = (maxValue: number, step: number) => {
-  //   const marks = [];
-  //   for (let i = 1; i <= maxValue; i += step) {
-  //     let label;
-  //     let value;
-  //     if (i === 1) {
-  //       value = i;
-  //       label = 1; // Ensure the first label is always 1
-  //     } else if (maxValue >= 10) {
-  //       value = i - 1;
-  //       label = value.toString();
-  //       // label = Math.floor(i / 10) * 10; // Round down to the nearest 10
-  //     } else {
-  //       value = i;
-  //       label = i; // Use exact values
-  //     }
-  //     marks.push({
-  //       value: value,
-  //       label: label.toString(),
-  //     });
-  //   }
-
-  //   // Ensure the last value is included
-  //   if (maxValue >= 10 && marks[marks.length - 1].value !== maxValue) {
-  //     marks.push({
-  //       value: maxValue,
-  //       label: maxValue.toString(),
-  //     });
-  //   }
-
-  //   return marks;
-  // };
-
-  const generateDynamicMarks = (
-    minValue: number,
-    maxValue: number,
-    step: number
-  ) => {
-    const range = maxValue - minValue;
-
-    // Determine the number of marks based on the range
-    let interval;
-    if (range <= 10) {
-      interval = 1; // For small ranges, mark every step
-    } else if (range <= 58) {
-      interval = 5; // For ranges like 1-58, mark every 5 steps
-    } else if (range <= 100) {
-      interval = 10; // For ranges like 0-100, mark every 10 steps
-    } else {
-      // For large ranges, calculate an interval to limit marks to 10-16
-      const maxMarks = 16;
-      interval = Math.ceil(range / maxMarks);
-      interval = Math.max(interval, step); // Ensure interval is at least the step size
-    }
-
-    // Generate marks
-    const marks = [];
-    for (let i = minValue; i <= maxValue; i += interval) {
-      marks.push({
-        value: i,
-        label: i.toString(),
-      });
-    }
-
-    // Ensure the last value (maxValue) is included
-    if (marks[marks.length - 1].value !== maxValue) {
-      marks.push({
-        value: maxValue,
-        label: maxValue.toString(),
-      });
-    }
-
-    return marks;
-  };
-
   return (
     <div className="space-y-8 w-full flex flex-col">
       <div className="space-y-8 w-full flex flex-col">
         <h3 className="">Select characteristics to filter words</h3>
-        <div className="w-full flex  border-foreground-100 rounded  flex-col space-y-16 lg:border-1 lg:shadow-md  lg:p-6 lg:pt-8 lg:pb-16 lg:px-12">
+        <div className="w-full flex border-foreground-100 rounded flex-col space-y-16 lg:border-1 lg:shadow-md lg:p-6 lg:pt-8 lg:pb-16 lg:px-12">
           <AgeBand ageBand={ageBand} setAgeBand={setAgeBand} />
 
           {/* Sliders & Checkboxes */}
           {stats.map((stat) => {
             if (stat.type === "slider") {
+              const sliderState = sliderStates[stat.id];
+
               return (
                 <div key={stat.id} className="space-y-4 relative">
                   <div className="absolute flex flex-row space-x-2 items-center top-4 left-0">
@@ -226,64 +600,118 @@ export const StatsInput: React.FC<StatsInput> = ({ handleSelectMode }) => {
                   <Slider
                     {...commonSliderProps}
                     label=" "
-                    defaultValue={[
-                      stat.minValue ?? 0, // Use default value if undefined
-                      stat.maxValue ?? 100, // Adjust default as needed
-                    ]}
+                    defaultValue={sliderState.range}
                     minValue={stat.minValue ?? 0}
                     maxValue={stat.maxValue ?? 100}
                     step={stat.step}
+                    value={sliderState.range}
                     onChange={(value) =>
-                      handleFilterChange(
-                        stat.value as keyof SearchCriteria,
-                        value
-                      )
+                      handleSliderChange(stat.value, value as number[])
                     }
                     marks={stat.marks}
+                    renderValue={({ children, ...props }) => (
+                      <div className="flex items-center space-x-4">
+                        <Tooltip
+                          className="text-tiny text-default-500 rounded-md"
+                          content="Press Enter to confirm"
+                          placement="left"
+                        >
+                          <input
+                            aria-label={`${stat.name} minimum value`}
+                            className="px-1 py-0.5 w-20 text-right text-small text-default-700 font-medium bg-default-100 outline-none transition-colors rounded-small border-medium border-transparent hover:border-primary focus:border-primary"
+                            type="text"
+                            value={sliderState.minInput}
+                            onChange={(e) =>
+                              handleMinInputChange(stat.value, e.target.value)
+                            }
+                            onKeyDown={(e) =>
+                              handleMinInputKeyDown(stat.value, e)
+                            }
+                          />
+                        </Tooltip>
+                        <span>-</span>
+                        <Tooltip
+                          className="text-tiny text-default-500 rounded-md"
+                          content="Press Enter to confirm"
+                          placement="left"
+                        >
+                          <input
+                            aria-label={`${stat.name} maximum value`}
+                            className="px-1 py-0.5 w-20 text-right text-small text-default-700 font-medium bg-default-100 outline-none transition-colors rounded-small border-medium border-transparent hover:border-primary focus:border-primary"
+                            type="text"
+                            value={sliderState.maxInput}
+                            onChange={(e) =>
+                              handleMaxInputChange(stat.value, e.target.value)
+                            }
+                            onKeyDown={(e) =>
+                              handleMaxInputKeyDown(stat.value, e)
+                            }
+                          />
+                        </Tooltip>
+                      </div>
+                    )}
                   />
                 </div>
               );
             } else if (stat.type === "checkbox-group") {
               return (
-                <CheckboxGroup
-                  key={stat.id}
-                  label={stat.name}
-                  orientation="horizontal"
-                  classNames={{
-                    wrapper:
-                      "flex flex-row mt-2 lg:mt-0 lg:space-x-16 lg:space-y-2 -mb-4",
-                    label: "font-semibold text-text",
-                  }}
-                >
-                  {mcpos.map((item) => (
-                    <Checkbox
-                      key={item.id}
-                      value={item.value}
-                      // onChange={() => handleCheckboxChange(item.value)}
-                      // onChange={(checked) =>
-                      //   updateCriteria(item.value, checked)
-                      // }
-                      onChange={(event) =>
-                        handleCheckboxChange(item.value, event.target.checked)
-                      }
-                      classNames={{
-                        wrapper: "fill-accent",
-                        label: "text-sm font-medium",
-                      }}
-                    >
-                      {item.name}
-                    </Checkbox>
-                  ))}
-                </CheckboxGroup>
+                <div key={stat.id} className="space-y-4 relative">
+                  <div className="absolute flex flex-row space-x-2 items-center top-4 left-0">
+                    <h4>{stat.name}</h4>
+                    {stat.tooltip && (
+                      <Tooltip
+                        {...commonTooltipProps(stat.value, stat.tooltip)}
+                      >
+                        <div className="flex items-center hover:opacity-100 transition-opacity opacity-50 z-50">
+                          <Button
+                            className="h-4 w-4 min-w-4 rounded-xl p-0 tooltip-button bg-text"
+                            onPress={() => handleTooltipToggle(stat.value)}
+                          >
+                            <InfoIcon
+                              size={10}
+                              className="fill-white"
+                              fill="white"
+                            />
+                          </Button>
+                        </div>
+                      </Tooltip>
+                    )}
+                  </div>
+                  <CheckboxGroup
+                    key={stat.id}
+                    label={stat.name}
+                    orientation="horizontal"
+                    classNames={{
+                      wrapper:
+                        "flex flex-row mt-2 lg:mt-0 lg:space-x-16 lg:space-y-2 -mb-4",
+                      label: "font-semibold text-text",
+                    }}
+                  >
+                    {mcpos.map((item) => (
+                      <Checkbox
+                        key={item.id}
+                        value={item.value}
+                        onChange={(event) =>
+                          handleCheckboxChange(item.value, event.target.checked)
+                        }
+                        classNames={{
+                          wrapper: "fill-accent",
+                          label: "text-sm font-medium",
+                        }}
+                      >
+                        {item.name}
+                      </Checkbox>
+                    ))}
+                  </CheckboxGroup>
+                </div>
               );
             }
             return null;
           })}
         </div>
 
-        {/* SUBMIT BUTTONS */}
+        {/* Submit Buttons */}
         <Submit
-          // searchCriteria={filters}
           searchCriteria={filters}
           handleClear={handleClear}
           age={ageBand}
@@ -294,398 +722,3 @@ export const StatsInput: React.FC<StatsInput> = ({ handleSelectMode }) => {
     </div>
   );
 };
-
-// BACKUP 2
-// import React, { useEffect, useState } from "react";
-
-// import { StatsSearchCriteria } from "@/app/types/data";
-
-// import { CheckboxGroup, Checkbox } from "@heroui/checkbox";
-// import { Slider } from "@heroui/slider";
-// import { Tooltip } from "@heroui/tooltip";
-// import { Button } from "@heroui/button";
-// import { AgeBand } from "./AgeBand";
-// import { Submit } from "./Submit";
-// import { InfoIcon } from "../icons";
-
-// interface StatsInput {
-//   handleSelectMode: (mode: string) => void;
-// }
-
-// export const StatsInput: React.FC<StatsInput> = ({ handleSelectMode }) => {
-//   const [isMobile, setisMobile] = React.useState(true);
-//   const [tooltipStates, setTooltipStates] = React.useState<{
-//     [key: string]: boolean;
-//   }>({});
-
-//   const [ageBand, setAgeBand] = useState("all");
-//   const [selectedCheckboxes, setSelectedCheckboxes] = React.useState<string[]>(
-//     []
-//   );
-//   const [searchCriteria, setSearchCriteria] = React.useState<
-//     Partial<StatsSearchCriteria>
-//   >({});
-
-//   const stats = [
-//     {
-//       id: 1,
-//       name: "Lemma",
-//       value: "lemma",
-//       tooltip: "Uninflected word form",
-//       type: "checkbox",
-//     },
-//     {
-//       id: 2,
-//       name: "Most common part of speech",
-//       value: "mcpos",
-//       type: "checkbox-group",
-//     },
-//     {
-//       id: 3,
-//       name: "Raw frequency",
-//       value: "raw",
-//       tooltip:
-//         "Number of times the word is encountered in the selected age range",
-//       type: "slider",
-//     },
-//     {
-//       id: 4,
-//       name: "Zipf frequency",
-//       value: "zipf",
-//       tooltip: "Standardised frequency metric in the selected age range",
-//       type: "slider",
-//     },
-//     {
-//       id: 5,
-//       name: "Book raw count",
-//       value: "book-raw-count",
-//       tooltip:
-//         "Number of books in the selected age range the word is encountered in",
-//       type: "slider",
-//     },
-//     {
-//       id: 6,
-//       name: "Book percentage",
-//       value: "book-percentage",
-//       tooltip:
-//         "Percentage of books in the selected age range the word is encountered in",
-//       type: "slider",
-//     },
-//     {
-//       id: 7,
-//       name: "Raw frequency in CBeebies TV programmes (ages 0-6)",
-//       value: "raw-cbeebies",
-//       type: "slider",
-//     },
-//     {
-//       id: 8,
-//       name: "Zipf frequency in CBeebies TV programmes (ages 0-6)",
-//       value: "zipf-cbeebies",
-//       type: "slider",
-//     },
-//     {
-//       id: 9,
-//       name: "Raw frequency in CBBC TV programmes (ages 6-12)",
-//       value: "raw-cbbc",
-//       type: "slider",
-//     },
-//     {
-//       id: 10,
-//       name: "Zipf frequency in CBBC TV programmes (ages 6-12)",
-//       value: "zipf-cbbc",
-//       type: "slider",
-//     },
-//     {
-//       id: 11,
-//       name: "Raw frequency in TV programmes (all ages)",
-//       value: "raw-subtlex",
-//       type: "slider",
-//     },
-//     {
-//       id: 12,
-//       name: "Zipf frequency in TV programmes (all ages)",
-//       value: "zipf-subtlex",
-//       type: "slider",
-//     },
-//   ];
-
-//   const allpos = [
-//     { id: 1, name: "Noun", value: "noun" },
-//     { id: 2, name: "Verb", value: "verb" },
-//     { id: 3, name: "Adjective", value: "adjective" },
-//     { id: 4, name: "Adverb", value: "adverb" },
-//   ];
-
-//   useEffect(() => {
-//     const handleResize = () => {
-//       setisMobile(window.innerWidth <= 1024);
-//     };
-//     handleResize();
-//     window.addEventListener("resize", handleResize);
-//     return () => window.removeEventListener("resize", handleResize);
-//   }, []);
-
-//   // SEARCH CRITERIA HANDLERS -----------------------------------------------------------------------------
-//   const addAgeToSearchCriteria = (age: string) => {
-//     setSearchCriteria((prevCriteria) => ({
-//       ...prevCriteria,
-//       age: ageBand,
-//     }));
-//   };
-
-//   useEffect(() => {
-//     addAgeToSearchCriteria(ageBand);
-//     console.log("Current search criteria", searchCriteria);
-//   }, [ageBand]);
-
-//   const handleCheckboxChange = (value: string) => {
-//     setSelectedCheckboxes((prevSelected) =>
-//       prevSelected.includes(value)
-//         ? prevSelected.filter((item) => item !== value)
-//         : [...prevSelected, value]
-//     );
-//     setSearchCriteria((prevCriteria) => ({
-//       ...prevCriteria,
-//       partOfSpeech: selectedCheckboxes.includes(value)
-//         ? selectedCheckboxes.filter((item) => item !== value)
-//         : [...selectedCheckboxes, value],
-//     }));
-//   };
-
-//   const handleSliderChange = (
-//     key: keyof StatsSearchCriteria,
-//     value: number | number[]
-//   ) => {
-//     if (!key || !value) return;
-//     setSearchCriteria((prevCriteria) => ({
-//       ...prevCriteria,
-//       [key]: Array.isArray(value) ? value : [value, value],
-//     }));
-//   };
-
-//   // CLEAR BUTTON HANDLER ---------------------------------------------------------------------------------
-//   const handleClear = () => {
-//     handleSelectMode("");
-//   };
-
-//   // TOOLTIP HANDLERS --------------------------------------------------------------------------------------
-//   // Toggle tooltip visibility
-//   const handleTooltipToggle = (id: string) => {
-//     if (isMobile) {
-//       setTooltipStates((prevStates) => ({
-//         ...prevStates,
-//         [id]: !prevStates[id],
-//       }));
-//     }
-//   };
-
-//   const commonSliderProps = {
-//     classNames: {
-//       filler: "bg-gradient-to-r from-accentLight to-accentLight rounded-lg",
-//       labelWrapper: "mb-2",
-//       label: "font-semibold text-text text-base",
-//       value: "font-medium text-default-500 text-small",
-//       thumb: [
-//         "transition-size",
-//         "bg-gradient-to-r from-accentLight to-accentLight",
-//         "data-[dragging=true]:shadow-lg data-[dragging=true]:shadow-black/20",
-//         "data-[dragging=true]:w-7 data-[dragging=true]:h-7 data-[dragging=true]:after:h-6 data-[dragging=true]:after:w-6",
-//       ],
-//       step: "data-[in-range=true]:bg-black/30 dark:data-[in-range=true]:bg-white/50",
-//       mark: "mt-2",
-//     },
-//     className: "max-w-full",
-//     showSteps: !isMobile,
-//   };
-
-//   const commonTooltipProps = (id: string, content: string) => ({
-//     content: content,
-//     className:
-//       "bg-zinc-600 text-white rounded-md whitespace-normal max-w-72 text-xs text-center px-4 py-2",
-//     isOpen: isMobile ? tooltipStates[id] : undefined,
-//     onClose: () =>
-//       setTooltipStates((prevStates) => ({ ...prevStates, [id]: false })),
-//   });
-
-//   const generateMarks = (maxValue: number, step: number) => {
-//     const marks = [];
-//     for (let i = 1; i <= maxValue; i += step) {
-//       let label;
-//       let value;
-//       if (i === 1) {
-//         value = i;
-//         label = 1; // Ensure the first label is always 1
-//       } else if (maxValue >= 10) {
-//         value = i - 1;
-//         label = value.toString();
-//         // label = Math.floor(i / 10) * 10; // Round down to the nearest 10
-//       } else {
-//         value = i;
-//         label = i; // Use exact values
-//       }
-//       marks.push({
-//         value: value,
-//         label: label.toString(),
-//       });
-//     }
-
-//     // Ensure the last value is included
-//     if (maxValue >= 10 && marks[marks.length - 1].value !== maxValue) {
-//       marks.push({
-//         value: maxValue,
-//         label: maxValue.toString(),
-//       });
-//     }
-
-//     return marks;
-//   };
-
-//   return (
-//     <div className="space-y-8 w-full flex flex-col">
-//       <div className="space-y-8 w-full flex flex-col">
-//         <h3 className="">Select characteristics to filter words</h3>
-//         <div className="w-full flex  border-foreground-100 rounded  flex-col space-y-16 lg:border-1 lg:shadow-md  lg:p-6 lg:pt-8 lg:pb-16 lg:px-12">
-//           <AgeBand ageBand={ageBand} setAgeBand={setAgeBand} />
-
-//           {/* Sliders */}
-//           {/* Numbers of Letters */}
-//           <Slider
-//             {...commonSliderProps}
-//             label="Number of Letters"
-//             defaultValue={[1, 58]}
-//             maxValue={58}
-//             minValue={1}
-//             step={1}
-//             onChangeEnd={(value: number | number[]) =>
-//               handleSliderChange("numberOfLetters", value)
-//             }
-//             marks={generateMarks(58, 10)}
-//           />
-
-//           <div className="space-y-4 relative">
-//             <div className="absolute flex flex-row space-x-2 items-center top-4 left-0">
-//               <h4>Zipf frequency</h4>
-
-//               <Tooltip
-//                 {...commonTooltipProps(
-//                   "zipf",
-//                   "Standardised frequency metric in the selected age range"
-//                 )}
-//               >
-//                 <div className="flex items-center hover:opacity-100 transition-opacity opacity-50 z-50">
-//                   <Button
-//                     className="h-4 w-4 min-w-4 rounded-xl p-0 tooltip-button bg-text"
-//                     onPress={() => handleTooltipToggle("zipf")}
-//                   >
-//                     <InfoIcon size={10} className="fill-white" fill="white" />
-//                   </Button>
-//                 </div>
-//               </Tooltip>
-//             </div>
-//             <Slider
-//               {...commonSliderProps}
-//               label=" "
-//               defaultValue={[1, 8]}
-//               maxValue={8}
-//               minValue={1}
-//               step={1}
-//               onChangeEnd={(value) => handleSliderChange("zipf_freq", value)}
-//               marks={generateMarks(8, 1)}
-//             />
-//           </div>
-//           {/* Checkboxes */}
-//           <CheckboxGroup
-//             label="Most common part of speech"
-//             orientation="horizontal"
-//             classNames={{
-//               wrapper:
-//                 "flex flex-row mt-2 lg:mt-0  lg:space-x-16 lg:space-y-2 -mb-4",
-//               label: "font-semibold text-text",
-//             }}
-//           >
-//             {allpos.map((item) => (
-//               <Checkbox
-//                 key={item.id}
-//                 value={item.value}
-//                 onChange={() => handleCheckboxChange(item.value)}
-//                 classNames={{
-//                   wrapper: "fill-accent",
-//                   label: "text-sm font-medium",
-//                 }}
-//               >
-//                 {item.name}
-//               </Checkbox>
-//             ))}
-//           </CheckboxGroup>
-
-//           {/* Book percentage */}
-//           <div className="space-y-4 relative ">
-//             <div className="absolute flex flex-row space-x-2 items-center top-4 left-0">
-//               <h4>Book percentage</h4>
-//               <Tooltip
-//                 {...commonTooltipProps(
-//                   "percentage",
-//                   "Percentage of books in the selected age range the word is encountered in"
-//                 )}
-//               >
-//                 <div className="flex items-center hover:opacity-100 transition-opacity opacity-50 z-50">
-//                   <Button
-//                     className="h-4 w-4 min-w-4 rounded-xl p-0 tooltip-button bg-text"
-//                     onPress={() => handleTooltipToggle("percentage")}
-//                   >
-//                     <InfoIcon size={10} className="fill-white" fill="white" />
-//                   </Button>
-//                 </div>
-//               </Tooltip>
-//             </div>
-//             <Slider
-//               {...commonSliderProps}
-//               label=" "
-//               defaultValue={[0, 100]}
-//               maxValue={100}
-//               minValue={0}
-//               step={1}
-//               onChangeEnd={(value) => handleSliderChange("CD_book_perc", value)}
-//               marks={generateMarks(100, 20)}
-//             />
-//           </div>
-//           {/* TV */}
-
-//           <Slider
-//             {...commonSliderProps}
-//             label="Zipf frequency in CBeebies TV programmes (ages 0-6)"
-//             onChangeEnd={(value) => handleSliderChange("CBBC_zipf", value)}
-//             defaultValue={[0, 8]}
-//             maxValue={8}
-//             minValue={0}
-//             step={1}
-//             marks={generateMarks(8, 1)}
-//           />
-//           <Slider
-//             {...commonSliderProps}
-//             label="Zipf frequency in CBBC TV programmes (ages 6-12)"
-//             onChangeEnd={(value) => handleSliderChange("CBeebies_zipf", value)}
-//             defaultValue={[1, 8]}
-//             maxValue={8}
-//             minValue={1}
-//             step={1}
-//             marks={generateMarks(8, 1)}
-//           />
-//           <Slider
-//             {...commonSliderProps}
-//             label="Zipf frequency in TV programmes (all ages)"
-//             onChangeEnd={(value) => handleSliderChange("SUBTLEXUK_zipf", value)}
-//             defaultValue={[0, 8]}
-//             maxValue={8}
-//             minValue={0}
-//             step={1}
-//             marks={generateMarks(8, 1)}
-//           />
-//         </div>
-
-//         {/* SUBMIT BUTTONS */}
-//         <Submit searchCriteria={searchCriteria} handleClear={handleClear} />
-//       </div>
-//     </div>
-//   );
-// };

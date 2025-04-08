@@ -51,17 +51,12 @@ export const useFetchData = (id: string | null) => {
 
         const searchResults = await searchResponse.json();
 
-        const enhancedResults = searchResults.map((item: any) => ({
-          ...item,
-          numberOfLetters: item.Word ? item.Word.length : 0, // Calculate number of letters
-        }));
-
         // Combine search criteria and results
         setData({
           searchCriteria: result.searchCriteria || {},
           words: result.words || [],
           age: result.age || "all",
-          results: enhancedResults,
+          results: searchResults || [],
         });
       } catch (err) {
         setError("Error fetching data");
