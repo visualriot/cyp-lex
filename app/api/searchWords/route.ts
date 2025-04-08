@@ -42,6 +42,18 @@ export async function POST(request: Request) {
       const match = csvData.find(
         (row) => row.Word.toLowerCase() === word.toLowerCase()
       );
+
+      // Format numbers to 2 decimal places
+      if (match) {
+        Object.keys(match).forEach((key) => {
+          // Check if the value is a string that can be converted to a number
+          if (!isNaN(match[key])) {
+            const numericValue = parseFloat(match[key]); // Convert string to number
+            match[key] = parseFloat(numericValue.toFixed(2)); // Round to 2 decimal places
+          }
+        });
+      }
+
       return match || { Word: word, notFound: true }; // Return "not found" if no match
     });
 

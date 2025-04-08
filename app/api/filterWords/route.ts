@@ -72,7 +72,19 @@ export async function POST(request: Request) {
       return true;
     });
 
-    return NextResponse.json(filteredResults);
+    // Format numbers to 2 decimal places
+    const formattedResults = filteredResults.map((row) => {
+      Object.keys(row).forEach((key) => {
+        // Check if the value is a string that can be converted to a number
+        if (!isNaN(row[key])) {
+          const numericValue = parseFloat(row[key]); // Convert string to number
+          row[key] = parseFloat(numericValue.toFixed(2)); // Round to 2 decimal places
+        }
+      });
+      return row;
+    });
+
+    return NextResponse.json(formattedResults);
   } catch (error) {
     console.error("Error filtering words:", error);
     return NextResponse.json(

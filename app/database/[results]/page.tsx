@@ -38,7 +38,7 @@ export default function ResultsPage() {
     Count: "Raw frequency",
     Zipf_freq: "Zipf frequency",
     CD_book_count_raw: "CD_book_count_raw",
-    CD_book_perc_raw: "Book percentage",
+    CD_book_perc_raw: "Book proportion",
     CBeebies_raw: "Raw frequency in CBeebies TV programmes (ages 0-6)",
     CBeebies_log: "Zipf frequency in CBeebies TV programmes (ages 0-6)",
     CBBC_raw: "Raw frequency in CBBC TV programmes (ages 6-12)",
