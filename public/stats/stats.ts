@@ -10,11 +10,13 @@ export const stats = [
     id: 2,
     name: "Most common part of speech",
     value: "mcPoS",
+    tooltip:
+      "Part of speech the word is used in most frequently. Please refer to the READ ME tab for information on what each abbreviation stands for",
     type: "checkbox-group",
   },
   {
     id: 3,
-    name: "Number of Letters",
+    name: "Number of letters",
     value: "numberOfLetters",
     type: "slider",
     minValue: 0,
@@ -67,20 +69,20 @@ export const stats = [
   },
   {
     id: 6,
-    name: "Book percentage",
+    name: "Book proportion",
     value: "CD_book_perc_raw",
     tooltip:
-      "Percentage of books in the selected age range the word is encountered in",
+      "Proportion of books in the selected age range in which the word is encountered",
     type: "slider",
     minValue: 0,
     maxValue: 100,
     step: 5,
     marks: [
-      { value: 0, label: "0%" },
-      { value: 25, label: "25%" },
-      { value: 50, label: "50%" },
-      { value: 75, label: "75%" },
-      { value: 100, label: "100%" },
+      { value: 0, label: "0" },
+      { value: 25, label: "0.25" },
+      { value: 50, label: "0.5" },
+      { value: 75, label: "0.75" },
+      { value: 100, label: "1" },
     ],
   },
   {
