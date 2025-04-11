@@ -186,8 +186,12 @@ export const stats = [
 ];
 
 export const mcpos = [
-  { id: 1, name: "Noun", value: "NN" },
-  { id: 2, name: "Verb", value: "VB" },
-  { id: 3, name: "Adjective", value: "JJ" },
-  { id: 4, name: "Adverb", value: "RB" },
+  { id: 1, name: "Noun", value: "NN", codes: ["NN", "NNS"] },
+  { id: 2, name: "Verb", value: "VB", codes: ["VB"] },
+  { id: 3, name: "Adjective", value: "JJ", codes: ["JJ"] },
+  { id: 4, name: "Adverb", value: "RB", codes: ["RB", "RBR", "RBS", "WRB"] },
+  { id: 5, name: "Pronoun", value: "PRP", codes: ["PRP", "PP$", "WP", "WP$"] },
+  { id: 6, name: "Determiner", value: "DT", codes: ["DT", "PDT"] },
+  { id: 7, name: "Preposition", value: "IN", codes: ["IN"] },
+  { id: 8, name: "Conjunction", value: "CC", codes: ["CC"] },
 ];

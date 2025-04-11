@@ -49,7 +49,11 @@ export async function POST(request: Request) {
           // Check if the value is a string that can be converted to a number
           if (!isNaN(match[key])) {
             const numericValue = parseFloat(match[key]); // Convert string to number
-            match[key] = parseFloat(numericValue.toFixed(2)); // Round to 2 decimal places
+            if (numericValue < 0.005 && numericValue > 0) {
+              match[key] = "< 0.005";
+            } else {
+              match[key] = parseFloat(numericValue.toFixed(2)); // Round to 2 decimal places
+            }
           }
         });
       }
