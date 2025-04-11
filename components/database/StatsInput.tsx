@@ -234,12 +234,10 @@ export const StatsInput: React.FC<StatsInput> = ({ handleSelectMode }) => {
               return (
                 <div
                   key={stat.id}
-                  className="space-y-4 relative items-center justify-center flex flex-col w-full border-t-2 pt-6 border-zinc-100"
+                  className="space-y-4 relative items-center justify-center flex flex-col w-full border-t-2 pt-6 border-zinc-100 "
                 >
-                  <div className="flex lg:absolute flex-row space-x-2 items-center top-4 left-0">
-                    <h4 className="text-center lg:text-left text-base">
-                      {stat.name}
-                    </h4>
+                  <div className="flex lg:absolute flex-row space-x-2 items-center top-10 left-0">
+                    <h4 className="text-center lg:text-left">{stat.name}</h4>
                     {stat.tooltip && (
                       <Tooltip
                         {...commonTooltipProps(stat.value, stat.tooltip)}
@@ -319,9 +317,7 @@ export const StatsInput: React.FC<StatsInput> = ({ handleSelectMode }) => {
               return (
                 <div key={stat.id} className="space-y-4 relative">
                   <div className="lg:absolute flex flex-row space-x-2 items-center top-4 left-0 justify-center lg:justify-start">
-                    <h4 className="text-center lg:text-left text-base">
-                      {stat.name}
-                    </h4>
+                    <h4 className="text-center lg:text-left">{stat.name}</h4>
                     {stat.tooltip && (
                       <Tooltip
                         {...commonTooltipProps(stat.value, stat.tooltip)}
@@ -347,8 +343,8 @@ export const StatsInput: React.FC<StatsInput> = ({ handleSelectMode }) => {
                     orientation="horizontal"
                     classNames={{
                       wrapper:
-                        "flex flex-row mt-2 lg:mt-0 lg:space-x-8 lg:space-y-2 -mb-4 justify-between lg:justify-start",
-                      label: "font-semibold text-text",
+                        "flex flex-row mt-2 lg:mt-8 lg:space-x-8 lg:space-y-2 -mb-4 justify-between lg:justify-start",
+                      // label: "font-semibold text-text text-base",
                     }}
                   >
                     {mcpos.map((item) => (

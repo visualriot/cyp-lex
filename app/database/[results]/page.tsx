@@ -239,7 +239,7 @@ export default function ResultsPage() {
         </Table>
       ) : (
         // Show actual table after initial data is loaded
-        <div className="flex flex-col justify-center items-center w-full">
+        <div className="flex flex-col justify-center items-center w-full overflow-x-auto lg:overflow-x-visible">
           <Table
             aria-label="Table with search results"
             classNames={{
