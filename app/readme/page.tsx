@@ -11,7 +11,7 @@ export default function ReadmePage() {
       </h2>
       <p>For each word, CYP-LEX provides:</p>
       <ul className="red-disc space-y-2">
-        <li>Its lemma (uninflected form)</li>
+        <li>Its lemma (uninflected form);</li>
         <li>
           Its most common part of speech. The tags follow the Penn Treebank tag
           set. Detailed information on all tags can be accessed{" "}
@@ -22,17 +22,17 @@ export default function ReadmePage() {
           >
             here
           </a>{" "}
-          (see page 5 for what each abbreviation stands for).
+          (see page 5 for what each abbreviation stands for);
         </li>
         <li>
           The number of times it appears in books for a given age group (both
-          raw count and a standardised frequency metric, the Zipf frequency)
+          raw count and a standardised frequency metric, the Zipf frequency);
         </li>
         <li>
           The number of books in which it appears within that age group (raw
           count and percentage). Please note that for the individual age bands
           (7–9, 10–12, 13–16), the total number of books is 400, while for all
-          ages combined, the total is 1,200 books
+          ages combined, the total is 1,200 books;
         </li>
         <li>
           The number of times (both raw count and a standardised frequency
@@ -57,7 +57,7 @@ export default function ReadmePage() {
         or British spelling). You might want to try an alternative spelling.
         Please note that if a word is missing in CYP-LEX, this does not mean it
         is also unattested in SUBTLEX-UK, so you may want to check this database
-        instead
+        instead.
       </p>
       <PrimaryBtn href="/about" size="lg">
         Learn more

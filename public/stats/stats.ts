@@ -47,7 +47,8 @@ export const stats = [
       { value: 1000000, label: "1M" },
       { value: 2000000, label: "2M" },
       { value: 3000000, label: "3M" },
-      { value: 3671782, label: "3,671,782" },
+      // { value: 3671782, label: "3,671,782" },
+      { value: 3671782, label: "3,7M" },
     ],
   },
   {
@@ -98,7 +99,8 @@ export const stats = [
       { value: 50000, label: "50k" },
       { value: 100000, label: "100k" },
       { value: 150000, label: "150k" },
-      { value: 186232, label: "186,232" },
+      // { value: 186232, label: "186,232" },
+      { value: 186232, label: "186K" },
     ],
   },
   {
@@ -131,7 +133,8 @@ export const stats = [
       { value: 200000, label: "200k" },
       { value: 300000, label: "300k" },
       { value: 400000, label: "400k" },
-      { value: 512056, label: "512,056" },
+      // { value: 512056, label: "512,056" },
+      { value: 512056, label: "512K" },
     ],
   },
   {
@@ -164,7 +167,8 @@ export const stats = [
       { value: 4000000, label: "4M" },
       { value: 6000000, label: "6M" },
       { value: 8000000, label: "8M" },
-      { value: 9418422, label: "9,418,422" },
+      // { value: 9418422, label: "9,418,422" },
+      { value: 9418422, label: "9.5M" },
     ],
   },
   {
@@ -186,8 +190,12 @@ export const stats = [
 ];
 
 export const mcpos = [
-  { id: 1, name: "Noun", value: "NN" },
-  { id: 2, name: "Verb", value: "VB" },
-  { id: 3, name: "Adjective", value: "JJ" },
-  { id: 4, name: "Adverb", value: "RB" },
+  { id: 1, name: "Noun", value: "NN", codes: ["NN", "NNS"] },
+  { id: 2, name: "Verb", value: "VB", codes: ["VB"] },
+  { id: 3, name: "Adjective", value: "JJ", codes: ["JJ"] },
+  { id: 4, name: "Adverb", value: "RB", codes: ["RB", "RBR", "RBS", "WRB"] },
+  { id: 5, name: "Pronoun", value: "PRP", codes: ["PRP", "PP$", "WP", "WP$"] },
+  { id: 6, name: "Determiner", value: "DT", codes: ["DT", "PDT"] },
+  { id: 7, name: "Preposition", value: "IN", codes: ["IN"] },
+  { id: 8, name: "Conjunction", value: "CC", codes: ["CC"] },
 ];

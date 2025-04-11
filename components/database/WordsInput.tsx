@@ -123,7 +123,8 @@ export const WordsInput: React.FC<WordsInput> = ({ handleSelectMode }) => {
               label="Select all the characteristics you want to retrieve"
               orientation="horizontal"
               classNames={{
-                wrapper: "flex flex-wrap gap-x-7 gap-y-4 w-full",
+                wrapper:
+                  "flex flex-wrap gap-x-7 gap-y-4 w-full justify-center lg:justify-start",
                 label: "font-semibold text-text",
               }}
             >

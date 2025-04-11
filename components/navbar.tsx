@@ -27,7 +27,7 @@ export const Navbar = () => {
     <nav
       className={`${jetBrainsMono.variable} w-full flex justify-center items-center global-padding py-4 transition-all duration-300 ${
         isScrolled ? "bg-white shadow-md" : "bg-transparent"
-      } sticky top-0 z-50`}
+      } sticky top-0 z-[100]`}
     >
       <div className="mx-auto flex justify-between global-width container">
         <div>
