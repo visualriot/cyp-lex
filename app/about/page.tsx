@@ -59,7 +59,7 @@ export default function AboutPage() {
           }}
           classNames={{
             base: "w-full",
-            pre: "text-wrap",
+            pre: "text-wrap w-11/12 text-tiny lg:text-base",
           }}
           copyButtonProps={{
             className: "self-end",

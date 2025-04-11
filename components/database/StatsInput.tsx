@@ -195,8 +195,8 @@ export const StatsInput: React.FC<StatsInput> = ({ handleSelectMode }) => {
     classNames: {
       filler: "bg-gradient-to-r from-accentLight to-accentLight rounded-lg",
       labelWrapper: "mb-2",
-      label: "font-semibold text-text text-base",
-      value: "font-medium text-default-500 text-small",
+      // label: "font-semibold text-base",
+      // value: "font-medium text-default-500 text-secondary",
       thumb: [
         "transition-size",
         "bg-gradient-to-r from-accentLight to-accentLight",
@@ -206,7 +206,7 @@ export const StatsInput: React.FC<StatsInput> = ({ handleSelectMode }) => {
       step: "data-[in-range=true]:bg-black/30 dark:data-[in-range=true]:bg-white/50",
       mark: "mt-2",
     },
-    className: "max-w-full",
+    // className: "max-w-full",
     showSteps: false,
   };
 
@@ -232,14 +232,19 @@ export const StatsInput: React.FC<StatsInput> = ({ handleSelectMode }) => {
               const sliderState = sliderStates[stat.id];
 
               return (
-                <div key={stat.id} className="space-y-4 relative">
-                  <div className="absolute flex flex-row space-x-2 items-center top-4 left-0">
-                    <h4>{stat.name}</h4>
+                <div
+                  key={stat.id}
+                  className="space-y-4 relative items-center justify-center flex flex-col w-full border-t-2 pt-6 border-zinc-100"
+                >
+                  <div className="flex lg:absolute flex-row space-x-2 items-center top-4 left-0">
+                    <h4 className="text-center lg:text-left text-base">
+                      {stat.name}
+                    </h4>
                     {stat.tooltip && (
                       <Tooltip
                         {...commonTooltipProps(stat.value, stat.tooltip)}
                       >
-                        <div className="flex items-center hover:opacity-100 transition-opacity opacity-50 z-50">
+                        <div className="flex items-center hover:opacity-100 transition-opacity opacity-50 ">
                           <Button
                             className="h-4 w-4 min-w-4 rounded-xl p-0 tooltip-button bg-text"
                             onPress={() => handleTooltipToggle(stat.value)}
@@ -267,7 +272,7 @@ export const StatsInput: React.FC<StatsInput> = ({ handleSelectMode }) => {
                     }
                     marks={stat.marks}
                     renderValue={({ children, ...props }) => (
-                      <div className="flex items-center space-x-4">
+                      <div className="flex-row items-center space-x-4 w-full lg:w-auto">
                         <Tooltip
                           className="text-tiny text-default-500 rounded-md"
                           content="Press Enter to confirm"
@@ -313,8 +318,10 @@ export const StatsInput: React.FC<StatsInput> = ({ handleSelectMode }) => {
             } else if (stat.type === "checkbox-group") {
               return (
                 <div key={stat.id} className="space-y-4 relative">
-                  <div className="absolute flex flex-row space-x-2 items-center top-4 left-0">
-                    <h4>{stat.name}</h4>
+                  <div className="lg:absolute flex flex-row space-x-2 items-center top-4 left-0 justify-center lg:justify-start">
+                    <h4 className="text-center lg:text-left text-base">
+                      {stat.name}
+                    </h4>
                     {stat.tooltip && (
                       <Tooltip
                         {...commonTooltipProps(stat.value, stat.tooltip)}
@@ -336,11 +343,11 @@ export const StatsInput: React.FC<StatsInput> = ({ handleSelectMode }) => {
                   </div>
                   <CheckboxGroup
                     key={stat.id}
-                    label={stat.name}
+                    // label={stat.name}
                     orientation="horizontal"
                     classNames={{
                       wrapper:
-                        "flex flex-row mt-2 lg:mt-0 lg:space-x-8 lg:space-y-2 -mb-4",
+                        "flex flex-row mt-2 lg:mt-0 lg:space-x-8 lg:space-y-2 -mb-4 justify-between lg:justify-start",
                       label: "font-semibold text-text",
                     }}
                   >
